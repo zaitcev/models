@@ -6,3 +6,4 @@ outlet_base.stl     https://www.amazon.com/gp/product/B073DM1XRL/
 forlife_cover_1.scad     A lid for ForLife Lucidity brew cup, replacement
 forlife_cover_1.stl
 forlife_cover_2.scad     A lid for ForLife Lucidity brew cup, with a handle
+forlife_cover_2.stl
