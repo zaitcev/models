@@ -1,3 +1,5 @@
+asus_ux303_key1.scad     The key cap for ASUS UX303. This design is impossible
+                         to print on common desktop printers.
 
 bell_support.scad        A door bell console
 bell_weight.scad
