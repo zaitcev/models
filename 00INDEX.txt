@@ -20,5 +20,8 @@ mooney_anun_1.stl
 outlet_base.scad         A base for a wall outlet adapter tap for 6 outlets
 outlet_base.stl          https://www.amazon.com/gp/product/B073DM1XRL/
 
+ph_holder_bmw_x3.scad    The 2019 BMW X3 phone holder
+ph_holder_bmw_x3.stl
+
 shoe_horn_hanger.scad    A hanger hook for a shoe horn
 shoe_horn_hanger.stl
