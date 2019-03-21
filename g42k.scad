@@ -6,12 +6,17 @@
 // Copyright (c) 2019 Pete Zaitcev
 //
 
-module main_body(height) {
+// This version is intended for priting from PLA, for prototyping.
+
+module main_body(height, base_height) {
+
     // maximum width from side to side
+    // We had 26.0 on No.2, which was too tight. The 26.6 is a scootch too
+    // wide, but we need that space for a 3M 144 glue strip.
     butt_width = 26.6;
 
     side_r = 50;
-    front_r = 13;
+    front_r = 13.6;
     back_r = 12.4;
 
     intersection () {
@@ -35,19 +40,22 @@ module main_body(height) {
         }
 
         // Additional bevelling for the front strap
-        multmatrix(m = [[   1,   0,  -0.215, 0],
+        multmatrix(m = [[   1,   0,  -0.204, 0],
                         [   0,   1,   0,     0],
                         [   0,   0,   1,     0],
                         [   0,   0,   0,     1]])
         {
             union () {
                 $fn = 40;
-                translate([-7.5, 0, 0])
-                    cylinder(height, front_r, front_r*1.15);
-                translate([-6.5, ((butt_width * 1.1)/2)*-1, 0])
+                translate([-6.9, 0, 0])
+                    cylinder(base_height-1.0, front_r, front_r*1.08);
+                // small edge bevelling cone
+                translate([-6.9, 0, base_height-1.0])
+                    cylinder(3, front_r*1.08, front_r*0.98);
+                translate([-15.0, ((butt_width * 1.1)/2)*-1, 0])
                     cube([60, butt_width * 1.1, height]);
-                translate([-20, ((butt_width * 1.1)/2)*-1, 25.1])
-                    cube([60, butt_width * 1.1, height]);
+                translate([-20, ((butt_width * 1.1)/2)*-1, base_height+0.1])
+                    cube([60, butt_width * 1.1, (height-base_height)+0.1] );
             }
         }
 
@@ -72,8 +80,8 @@ module main_body(height) {
         translate([-21, butt_width*-1, -11.6]) {
             rotate(-14.5, [0, 1, 0]) {
                 difference () {
-                    cube([60, butt_width*2, (height + 3) / cos(14)]);
-                    translate([0, 0, height + 1])
+                    cube([60, butt_width*2, (height + 4.5) / cos(14)]);
+                    translate([0, 0, height + 2.0])
                         cube([19, butt_width*2, 10]);
                 }
             }
@@ -167,8 +175,8 @@ module grip_cavity(height) {
     // between this cut and the magazine well is too thin to pring, so we add
     // another extension to the cut that removes the wall.
     cut_width = 30;
-    // XXX No.1 used -6.6 depth. For No.2 we go to -5.5.
-    translate([48.5, (cut_width/2)*-1, -5.5]) {
+    // No.1 used -6.6 depth. For No.2 we went to -5.5.
+    translate([48.5, (cut_width/2)*-1, -5.8]) {
         multmatrix(m = [[  1,    0,  -0.27,  0],
                         [  0,    1,   0,     0],
                         [  0.35, 0,   1,     0],
@@ -186,7 +194,7 @@ module grip_cavity(height) {
 module butt_plug () {
     $fn = 40;
 
-    plug_r = 8.0;
+    plug_r = 8.4;
 
     // N.B. This height is more than it sticks out from any point on the
     // plane where it sits. But we do not make it grow from the zero plane
@@ -194,7 +202,7 @@ module butt_plug () {
     plug_height = 14;
 
     // This is the thickness of the plug's plane segment.
-    plug_thickness = 6.0;
+    plug_thickness = 6.2;
 
     intersection () {
         translate([0, plug_r*-1, 0])
@@ -211,13 +219,15 @@ difference () {
     // cavity is big enough to reach the top always.
     top_height = 44.0;
 
+    base_height = 25.0;
+
     translate([17.3, 0, 0])
-        main_body(top_height+25.0);
-    translate([-20.2, 0, 25.0])
+        main_body(top_height+base_height, base_height);
+    translate([-20.2, 0, base_height])
         grip_cavity(top_height+0.1);
     // The front of the magazine well is the datum axis.
     translate([0, 0, -0.1])
-        mag_cavity(25.0+0.2);
+        mag_cavity(base_height+0.2);
 }
 
 translate([30.1, 0, 17])
