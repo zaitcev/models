@@ -8,11 +8,11 @@
 
 module main_body(height) {
     // maximum width from side to side
-    butt_width = 26;
+    butt_width = 26.6;
 
     side_r = 50;
     front_r = 13;
-    back_r = 12;
+    back_r = 12.4;
 
     intersection () {
 
@@ -35,7 +35,7 @@ module main_body(height) {
         }
 
         // Additional bevelling for the front strap
-        multmatrix(m = [[   1,   0,  -0.25, 0],
+        multmatrix(m = [[   1,   0,  -0.215, 0],
                         [   0,   1,   0,     0],
                         [   0,   0,   1,     0],
                         [   0,   0,   0,     1]])
@@ -43,7 +43,7 @@ module main_body(height) {
             union () {
                 $fn = 40;
                 translate([-7.5, 0, 0])
-                    cylinder(height, front_r, front_r);
+                    cylinder(height, front_r, front_r*1.15);
                 translate([-6.5, ((butt_width * 1.1)/2)*-1, 0])
                     cube([60, butt_width * 1.1, height]);
                 translate([-20, ((butt_width * 1.1)/2)*-1, 25.1])
@@ -59,7 +59,7 @@ module main_body(height) {
                         [   0,   0,   0,     1]])
         {
             union () {
-                translate([back_r-3.5, 0, 0])
+                translate([back_r-3.9, 0, 0])
                     cylinder(height, back_r, back_r*0.6);
                 translate([(60 - (back_r))*-1, ((butt_width * 1.1)/2)*-1, 0])
                     cube([60, butt_width * 1.1, height]);
@@ -69,12 +69,12 @@ module main_body(height) {
         // The top cut is a rotated cube. We use a multmatrix for most
         // of the body, instead of rotation, but then we want two square
         // angle cuts at the top, and this is it.
-        translate([-21, butt_width*-1, -11]) {
-            rotate(-14.0, [0, 1, 0]) {
+        translate([-21, butt_width*-1, -11.6]) {
+            rotate(-14.5, [0, 1, 0]) {
                 difference () {
                     cube([60, butt_width*2, (height + 3) / cos(14)]);
                     translate([0, 0, height + 1])
-                        cube([18, butt_width*2, 10]);
+                        cube([19, butt_width*2, 10]);
                 }
             }
         }
@@ -89,41 +89,55 @@ module main_body(height) {
 // narrower than the model. The actual magazine is 17.7 mm thick in the rear,
 // but we need more. Fortunately, it narrows towards the nose.
 
-mag_cav_width_rear = 18.5;
+mag_cav_width_rear = 19.0;
 
 module mag_cavity(height) {
 
     front_r = 3.0;
-    rear_r = 1.5;
 
     cav_width_rear = mag_cav_width_rear;
     cav_width_nose = 16.2;
-    cav_length = 32.0;
+    cav_length = 31.5;  // note that scalloping makes it longer
 
-    multmatrix(m = [[   1,   0,  -0.205, 0],
+    multmatrix(m = [[   1,   0,  -0.215, 0],
                     [   0,   1,   0,     0],
                     [   0,   0,   1,     0],
                     [   0,   0,   0,     1]])
     {
-        hull () {
-            // XXX This $fn has no effect for an unknown reason.
-            // $fn = 18;
-            translate([front_r, (cav_width_nose/2 - front_r)*-1, 0])
-                cylinder(height, front_r, front_r);
-            translate([front_r, (cav_width_nose/2 - front_r), 0])
-                cylinder(height, front_r, front_r);
+        union () {
+            hull () {
+                // XXX This $fn has no effect for an unknown reason.
+                // $fn = 18;
+                translate([front_r, (cav_width_nose/2 - front_r)*-1, 0])
+                    cylinder(height, front_r, front_r);
+                translate([front_r, (cav_width_nose/2 - front_r), 0])
+                    cylinder(height, front_r, front_r);
 
-            translate([cav_length*0.33, (cav_width_rear/2 - front_r)*-1, 0])
-                cylinder(height, front_r, front_r);
-            translate([cav_length*0.33, (cav_width_rear/2 - front_r), 0])
-                cylinder(height, front_r, front_r);
+                translate([cav_length*0.33,
+                           (cav_width_rear/2 - front_r)*-1, 0])
+                    cylinder(height, front_r, front_r);
+                translate([cav_length*0.33,
+                           (cav_width_rear/2 - front_r), 0])
+                    cylinder(height, front_r, front_r);
 
-            // very small circles in the rear of the cavity
-            $fn = 12;
-            translate([cav_length - rear_r, (cav_width_rear/2 - rear_r)*-1, 0])
-                cylinder(height, rear_r, rear_r);
-            translate([cav_length - rear_r, (cav_width_rear/2 - rear_r), 0])
-                cylinder(height, rear_r, rear_r);
+                rear_r = 1.0;
+                // very small circles in the rear of the cavity
+                $fn = 12;
+                translate([cav_length - rear_r,
+                           (cav_width_rear/2 - rear_r)*-1, 0])
+                    cylinder(height, rear_r, rear_r);
+                translate([cav_length - rear_r,
+                           (cav_width_rear/2 - rear_r), 0])
+                    cylinder(height, rear_r, rear_r);
+
+                // This is simple but somehow the shape of the hull changes.
+                // translate([cav_length - 10, (cav_width_rear/2)*-1, 0])
+                //     cube([10, cav_width_rear, height]);
+            }
+
+            // This little scalloping in the rear reduces friction.
+            translate([1.0, ((cav_width_rear*0.7)/2)*-1, 0])
+                cube([cav_length, cav_width_rear*0.7, height]);
         }
     }
 }
@@ -131,7 +145,7 @@ module mag_cavity(height) {
 // We will fix it up later (the front is a little narrower than the back).
 module grip_cavity(height) {
 
-    cav_width = 22.0;
+    cav_width = 22.6;
     // This multmatrix is for the front strap
     multmatrix(m = [[   1,   0,  -0.27, 0],
                     [   0,   1,   0,     0],
@@ -140,6 +154,12 @@ module grip_cavity(height) {
     {
         translate([0, (cav_width/2)*-1, 0])
             cube([65, cav_width, height]);
+    }
+
+        // A scalloping for the glue strip.
+    translate([20, ((cav_width+0.8)/2)*-1, 15]) {
+        rotate(-14.7, [0, 1, 0])
+            cube([14, (cav_width+0.8), height]);
     }
 
     // Note that the grip cavity has a little extension down, negative by Y,
@@ -171,10 +191,10 @@ module butt_plug () {
     // N.B. This height is more than it sticks out from any point on the
     // plane where it sits. But we do not make it grow from the zero plane
     // because we don't want it to intrude into the magazine cavity.
-    plug_height = 11;
+    plug_height = 14;
 
     // This is the thickness of the plug's plane segment.
-    plug_thickness = 5.8;
+    plug_thickness = 6.0;
 
     intersection () {
         translate([0, plug_r*-1, 0])
@@ -200,6 +220,6 @@ difference () {
         mag_cavity(25.0+0.2);
 }
 
-translate([30.5, 0, 17])
+translate([30.1, 0, 17])
     rotate(-12, [0, 1, 0])
         butt_plug();
