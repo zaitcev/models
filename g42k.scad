@@ -212,24 +212,28 @@ module butt_plug () {
     }
 }
 
-difference () {
+module g42k_base() {
+    // there's an implicit union here
 
-    // Note that the main body is heavily clipped on the top, so the actual
-    // height is probably smaller. It's just the size that makes sure the
-    // cavity is big enough to reach the top always.
-    top_height = 44.0;
+    difference () {
 
-    base_height = 25.0;
+        // Note that the main body is heavily clipped on the top, so the actual
+        // height is probably smaller. It's just the size that makes sure the
+        // cavity is big enough to reach the top always.
+        top_height = 44.0;
 
-    translate([17.3, 0, 0])
-        main_body(top_height+base_height, base_height);
-    translate([-20.2, 0, base_height])
-        grip_cavity(top_height+0.1);
-    // The front of the magazine well is the datum axis.
-    translate([0, 0, -0.1])
-        mag_cavity(base_height+0.2);
+        base_height = 25.0;
+
+        translate([17.3, 0, 0])
+            main_body(top_height+base_height, base_height);
+        translate([-20.2, 0, base_height])
+            grip_cavity(top_height+0.1);
+        // The front of the magazine well is the datum axis.
+        translate([0, 0, -0.1])
+            mag_cavity(base_height+0.2);
+    }
+
+    translate([30.1, 0, 17])
+        rotate(-12, [0, 1, 0])
+            butt_plug();
 }
-
-translate([30.1, 0, 17])
-    rotate(-12, [0, 1, 0])
-        butt_plug();
