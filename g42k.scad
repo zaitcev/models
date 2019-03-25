@@ -74,15 +74,42 @@ module main_body(height, base_height) {
             }
         }
 
-        // The top cut is a rotated cube. We use a multmatrix for most
-        // of the body, instead of rotation, but then we want two square
-        // angle cuts at the top, and this is it.
+        // The top cut is based on rotated cubes. We use a multmatrix for
+        // most of the body, instead of rotation, but then we want two square
+        // angle cuts at the top, for the magazine release. However,
+        // that is not all. First issue, magazine latch cutouts are different
+        // on left and right. Second issue, when glue strips are too thick,
+        // side panels stick out and one can feel them with the hand.
+        // We really should use some kind of cylinder for them, but for now
+        // several 45 degree cubes do the job.
         translate([-21, butt_width*-1, -11.6]) {
             rotate(-14.5, [0, 1, 0]) {
                 difference () {
+                    // main top cut as a container cube
                     cube([60, butt_width*2, (height + 4.5) / cos(14)]);
-                    translate([0, 0, height + 2.0])
-                        cube([19, butt_width*2, 10]);
+
+                    // 45-degree bevel for the top
+                    translate([9.7, -0.1, height + 10.0])
+                        rotate(45, [0, 1, 0])
+                            cube([10, butt_width*2+0.2, 10]);
+
+                    // magazine latch right side
+                    translate([-0.1, butt_width-0.1, height + 2.0])
+                        cube([19.2, butt_width*2, 10]);
+
+                    // 45-degree bevel for right side
+                    translate([-1, butt_width-0.1, height + 4])
+                        rotate(45, [0, 1, 0])
+                            cube([10, butt_width*2, 10]);
+
+                    // magazine latch left side
+                    translate([-0.1, butt_width*-1, height + 3.0])
+                        cube([19.2, butt_width*2, 10]);
+
+                    // 45-degree bevel for left side
+                    translate([-1, butt_width*-1, height + 5])
+                        rotate(45, [0, 1, 0])
+                            cube([10, butt_width*2, 10]);
                 }
             }
         }
@@ -164,10 +191,10 @@ module grip_cavity(height) {
             cube([65, cav_width, height]);
     }
 
-        // A scalloping for the glue strip.
-    translate([20, ((cav_width+0.8)/2)*-1, 15]) {
+    // Scalloping for the glue strip.
+    translate([20, ((cav_width+0.9)/2)*-1, 15]) {
         rotate(-14.7, [0, 1, 0])
-            cube([14, (cav_width+0.8), height]);
+            cube([14, (cav_width+0.9), height]);
     }
 
     // Note that the grip cavity has a little extension down, negative by Y,
@@ -226,8 +253,10 @@ module g42k_base() {
 
         translate([17.3, 0, 0])
             main_body(top_height+base_height, base_height);
+
         translate([-20.2, 0, base_height])
             grip_cavity(top_height+0.1);
+
         // The front of the magazine well is the datum axis.
         translate([0, 0, -0.1])
             mag_cavity(base_height+0.2);
