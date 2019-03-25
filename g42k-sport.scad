@@ -24,36 +24,41 @@ module sport_cavity (height) {
     cav_length = 31.5;  // note that scalloping makes it longer
 
     translate ([0, 0, height]) mirror ([0, 0, 1]) {
-        multmatrix(m = [[   1,   0,   0.23,  0],
-                        [   0,   1,   0,     0],
-                        [   0,   0,   1,     0],
-                        [   0,   0,   0,     1]])
-        {
-            hull () {
-                // XXX This $fn has no effect for an unknown reason.
-                // $fn = 18;
-                translate([front_r, (cav_width_nose/2 - front_r)*-1, 0])
-                    cylinder(height, front_r, front_r+2.0);
-                translate([front_r, (cav_width_nose/2 - front_r), 0])
-                    cylinder(height, front_r, front_r+2.0);
+        union () {
+            multmatrix(m = [[   1,   0,   0.23,  0],
+                            [   0,   1,   0,     0],
+                            [   0,   0,   1,     0],
+                            [   0,   0,   0,     1]])
+            {
+                hull () {
+                    // XXX This $fn has no effect for an unknown reason.
+                    // $fn = 18;
+                    translate([front_r, (cav_width_nose/2 - front_r)*-1, 0])
+                        cylinder(height, front_r, front_r+2.0);
+                    translate([front_r, (cav_width_nose/2 - front_r), 0])
+                        cylinder(height, front_r, front_r+2.0);
 
-                translate([cav_length*0.33,
-                           (cav_width_rear/2 - front_r)*-1, 0])
-                    cylinder(height, front_r, front_r+2.0);
-                translate([cav_length*0.33,
-                           (cav_width_rear/2 - front_r), 0])
-                    cylinder(height, front_r, front_r+2.0);
+                    translate([cav_length*0.33,
+                               (cav_width_rear/2 - front_r)*-1, 0])
+                        cylinder(height, front_r, front_r+2.0);
+                    translate([cav_length*0.33,
+                               (cav_width_rear/2 - front_r), 0])
+                        cylinder(height, front_r, front_r+2.0);
 
-                rear_r = 1.0;
-                // very small circles in the rear of the cavity
-                $fn = 12;
-                translate([cav_length - rear_r,
-                           (cav_width_rear/2 - rear_r)*-1, 0])
-                    cylinder(height, rear_r, rear_r+2.0);
-                translate([cav_length - rear_r,
-                           (cav_width_rear/2 - rear_r), 0])
-                    cylinder(height, rear_r, rear_r+2.0);
+                    rear_r = 1.0;
+                    // very small circles in the rear of the cavity
+                    $fn = 12;
+                    translate([cav_length - rear_r,
+                               (cav_width_rear/2 - rear_r)*-1, 0])
+                        cylinder(height, rear_r, rear_r+2.0);
+                    translate([cav_length - rear_r,
+                               (cav_width_rear/2 - rear_r), 0])
+                        cylinder(height, rear_r, rear_r+2.0);
+                }
+
             }
+            translate([1.0, ((cav_width_rear*0.7)/2)*-1, 0])
+                cube([cav_length, cav_width_rear*0.7, height]);
         }
     }
 }
