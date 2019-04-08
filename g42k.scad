@@ -6,7 +6,7 @@
 // Copyright (c) 2019 Pete Zaitcev
 //
 
-// This version is intended for priting from PLA, for prototyping.
+// This version is intended for priting from ABS.
 
 module main_body(height, base_height) {
 
@@ -203,7 +203,7 @@ module grip_cavity(height) {
     // another extension to the cut that removes the wall.
     cut_width = 30;
     // No.1 used -6.6 depth. For No.2 we went to -5.5.
-    translate([48.5, (cut_width/2)*-1, -5.8]) {
+    translate([49.0, (cut_width/2)*-1, -5.8]) {
         multmatrix(m = [[  1,    0,  -0.27,  0],
                         [  0,    1,   0,     0],
                         [  0.35, 0,   1,     0],
@@ -218,10 +218,11 @@ module grip_cavity(height) {
     }
 }
 
+// XXX Change the solid plug to C-shape.
 module butt_plug () {
     $fn = 40;
 
-    plug_r = 8.4;
+    plug_r = 8.5;
 
     // N.B. This height is more than it sticks out from any point on the
     // plane where it sits. But we do not make it grow from the zero plane
@@ -229,7 +230,7 @@ module butt_plug () {
     plug_height = 14;
 
     // This is the thickness of the plug's plane segment.
-    plug_thickness = 6.2;
+    plug_thickness = 6.5;
 
     intersection () {
         translate([0, plug_r*-1, 0])
@@ -262,7 +263,7 @@ module g42k_base() {
             mag_cavity(base_height+0.2);
     }
 
-    translate([30.1, 0, 17])
+    translate([30.0, 0, 17])
         rotate(-12, [0, 1, 0])
             butt_plug();
 }
