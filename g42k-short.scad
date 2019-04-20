@@ -10,8 +10,7 @@ use <g42k.scad>;
 
 cutout_height = 4.5;
 
-// XXX make butt_width a parameter of some kind
-butt_width = 26.6;
+butt_width = f_butt_width();
 
 difference () {
     g42k_base();

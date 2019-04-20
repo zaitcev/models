@@ -8,12 +8,14 @@
 
 // This version is intended for priting from ABS.
 
+// maximum width from side to side
+// We had 26.0 on No.2, which was too tight. The 26.6 is a scootch too
+// wide, but we need that space for a 3M 144 glue strip.
+function f_butt_width() = 26.6;
+
 module main_body(height, base_height) {
 
-    // maximum width from side to side
-    // We had 26.0 on No.2, which was too tight. The 26.6 is a scootch too
-    // wide, but we need that space for a 3M 144 glue strip.
-    butt_width = 26.6;
+    butt_width = f_butt_width();
 
     side_r = 50;
     front_r = 13.6;
@@ -124,13 +126,13 @@ module main_body(height, base_height) {
 // narrower than the model. The actual magazine is 17.7 mm thick in the rear,
 // but we need more. Fortunately, it narrows towards the nose.
 
-mag_cav_width_rear = 19.0;
+function f_mag_cav_width_rear() = 19.0;
 
 module mag_cavity(height) {
 
     front_r = 3.0;
 
-    cav_width_rear = mag_cav_width_rear;
+    cav_width_rear = f_mag_cav_width_rear();
     cav_width_nose = 16.2;
     cav_length = 31.5;  // note that scalloping makes it longer
 
@@ -180,7 +182,9 @@ module mag_cavity(height) {
 // We will fix it up later (the front is a little narrower than the back).
 module grip_cavity(height) {
 
+    cav_width_rear = f_mag_cav_width_rear();
     cav_width = 22.6;
+
     // This multmatrix is for the front strap
     multmatrix(m = [[   1,   0,  -0.27, 0],
                     [   0,   1,   0,     0],
@@ -212,8 +216,8 @@ module grip_cavity(height) {
             // main cut
             cube([26, cut_width, 10]);
             // wall cut
-            translate([-4, (cut_width - mag_cav_width_rear)/2, 0])
-                cube([4+0.1, mag_cav_width_rear, 10]);
+            translate([-4, (cut_width - cav_width_rear)/2, 0])
+                cube([4+0.1, cav_width_rear, 10]);
         }
     }
 }

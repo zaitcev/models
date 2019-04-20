@@ -8,10 +8,6 @@
 
 use <g42k.scad>;
 
-// XXX For whatever reason the constants defined in modules are not visible
-// when the "use" statement is in effect. Duplicate for now.
-mag_cav_width_rear = 19.0;
-
 funnel_height = 8.0;
 
 // This must match the mag_cavity() module precisely.
@@ -19,7 +15,7 @@ module sport_cavity (height) {
 
     front_r = 3.0;
 
-    cav_width_rear = mag_cav_width_rear;
+    cav_width_rear = f_mag_cav_width_rear();
     cav_width_nose = 16.2;
     cav_length = 31.5;  // note that scalloping makes it longer
 
@@ -64,7 +60,7 @@ module sport_cavity (height) {
 }
 
 module sport_body (height) {
-    butt_width = 26.6;
+    butt_width = f_butt_width();
 
     side_r = 50;
     front_r = 13.6;
