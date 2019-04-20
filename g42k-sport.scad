@@ -30,31 +30,41 @@ module sport_cavity (height) {
                     // XXX This $fn has no effect for an unknown reason.
                     // $fn = 18;
                     translate([front_r, (cav_width_nose/2 - front_r)*-1, 0])
-                        cylinder(height, front_r, front_r+2.0);
+                        cylinder(height, front_r, front_r+2.8);
                     translate([front_r, (cav_width_nose/2 - front_r), 0])
-                        cylinder(height, front_r, front_r+2.0);
+                        cylinder(height, front_r, front_r+2.8);
 
                     translate([cav_length*0.33,
                                (cav_width_rear/2 - front_r)*-1, 0])
-                        cylinder(height, front_r, front_r+2.0);
+                        cylinder(height, front_r, front_r+3.3);
                     translate([cav_length*0.33,
                                (cav_width_rear/2 - front_r), 0])
-                        cylinder(height, front_r, front_r+2.0);
+                        cylinder(height, front_r, front_r+3.3);
 
                     rear_r = 1.0;
                     // very small circles in the rear of the cavity
                     $fn = 12;
                     translate([cav_length - rear_r,
                                (cav_width_rear/2 - rear_r)*-1, 0])
-                        cylinder(height, rear_r, rear_r+2.0);
+                        cylinder(height, rear_r, rear_r+2.7);
                     translate([cav_length - rear_r,
                                (cav_width_rear/2 - rear_r), 0])
-                        cylinder(height, rear_r, rear_r+2.0);
+                        cylinder(height, rear_r, rear_r+2.7);
+
+                    // A little addendum to the rear space; notice how it
+                    // uses the identical X translation and lower radius,
+                    // so it matches the base body's contour, per the above.
+                    translate([cav_length - rear_r, (cav_width_rear/4)*-1, 0])
+                        cylinder(height, rear_r, rear_r+5.0);
+                    translate([cav_length - rear_r, cav_width_rear/4, 0])
+                        cylinder(height, rear_r, rear_r+5.0);
                 }
 
+                // A matching anti-friction cut, just to make the print look
+                // professional.
+                translate([1.0, ((cav_width_rear*0.7)/2)*-1, 0])
+                    cube([cav_length, cav_width_rear*0.7, height]);
             }
-            translate([1.0, ((cav_width_rear*0.7)/2)*-1, 0])
-                cube([cav_length, cav_width_rear*0.7, height]);
         }
     }
 }
@@ -88,19 +98,18 @@ module sport_body (height) {
                     intersection () {
                         $fn = 52;
                         translate([0, (side_r - butt_width/2)*-1, 0])
-                            cylinder(height, side_r, side_r*1.014);
+                            cylinder(height, side_r, side_r*1.03);
                         translate([0, side_r - butt_width/2, 0])
-                            cylinder(height, side_r, side_r*1.014);
+                            cylinder(height, side_r, side_r*1.03);
                     }
                 }
             }
 
-            multmatrix(m = [[   1,   0,  -0.01,  0],
+            multmatrix(m = [[   1,   0,  -0.08,  0],
                             [   0,   1,   0,    0],
                             [   0,   0,   1,    0],
                             [   0,   0,   0,    1]])
             {
-
                 // Front strap
                 translate([-1.7, ((butt_width * 1.1)/2)*-1, 0])
                     cube([100, butt_width * 1.1, height]);
@@ -116,7 +125,7 @@ module sport_body (height) {
 
                     // front bevel of a large radius
                     translate([front_face, 0, 0])
-                        cylinder(height, front_r, front_r*1.02);
+                        cylinder(height, front_r, front_r*1.08);
                     // wide cube
                     translate([front_face - 3, ((butt_width * 1.1)/2)*-1, 0])
                         cube([100, butt_width * 1.1, height]);
@@ -131,7 +140,7 @@ module sport_body (height) {
                 union () {
                     // back bevel of a large radius
                     translate([rear_face, 0, 0])
-                        cylinder(height, back_r, back_r*1.3);
+                        cylinder(height, back_r, back_r*1.4);
                     // wide cube
                     translate([(rear_face + 3) - 100,
                                ((butt_width * 1.1)/2)*-1, 0])
