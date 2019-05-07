@@ -7,12 +7,20 @@ bell_weight.scad
 bleach_pen_holder.scad   A holder for a Clorox bleach pen
 bleach_pen_holder.stl
 
+brwng_1911bl_fiber1.scad The fiber-optic front sight for Browning 1911-22 or
+                         1911-380 Black Label (not "Pro").
+
 cube1.stl           The default cube from Blender
 
 forlife_cover_1.scad     A lid for ForLife Lucidity brew cup, replacement
 forlife_cover_1.stl
 forlife_cover_2.scad     A lid for ForLife Lucidity brew cup, with a handle
 forlife_cover_2.stl
+
+g42k.scad                Common parts of G42K extensions for Glock 42
+g42k-base.scad           (for debugging)
+g42k-short.scad          Short version of G42K
+g42k-sport.scad          Longer sport version of G42K
 
 krydex_spacer_1.scad     A spacer for Glock 42 magazines in Krydex Gear poach
 krydex_spacer_1.stl      https://www.amazon.com/dp/B07L3DNPX3/
