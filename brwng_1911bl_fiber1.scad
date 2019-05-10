@@ -9,7 +9,7 @@ front_height = 2.47;
 front_length = 10.54;
 shear = (stock_height - front_height) / front_length;
 
-rod_dia = 1.5;
+rod_dia = 1.5 + 0.2;
 
 module rod_channel () {
     // translate([0, (1.5/2)*-1, (1.5/2)*-1])
@@ -20,7 +20,7 @@ module rod_channel () {
 }
 
 module rod_slot () {
-    translate([0, (1.5/2)*-1, 0])
+    translate([0, (rod_dia/2)*-1, 0])
         cube([stock_length*0.35, rod_dia, 7]);
 }
 
@@ -59,14 +59,14 @@ module main_body () {
                     rod_slot();
 
                 // The two left slots
-                left_offset = ((stock_width + rod_dia)/2 - 0.2)*-1;
+                left_offset = ((stock_width + rod_dia)/2 - 0.3)*-1;
                 translate([(stock_length*0.35 + 0.5)*-1, left_offset, 0])
                     rod_slot();
                 translate([0.5, left_offset, 0])
                     rod_slot();
 
                 // The two right slots
-                right_offset = (stock_width + rod_dia)/2 - 0.2;
+                right_offset = (stock_width + rod_dia)/2 - 0.3;
                 translate([(stock_length*0.35 + 0.5)*-1, right_offset, 0])
                     rod_slot();
                 translate([0.5, right_offset, 0])
@@ -78,22 +78,37 @@ module main_body () {
 
 module latch_pawls () {
     // Total X is 8.34 at the ends of the pawls.
-    tip_xlen = (8.34-7.53)/2;
-    tip_ylen = 2.85 - 0.4;
-    difference () {
-        union () {
-            translate([(7.53/2)*-1, (2.85/2)*-1, 0])
-                cube([7.53, 2.85, 2.78+0.1]);
+    tip_xlen = (8.34-7.53)/2 + 0.2;  // 0.2 for experiments
+    tip_ylen = 2.85;
 
-            // Pawl tip front
-            translate([(7.53/2 + tip_xlen)*-1, (tip_ylen/2)*-1,
-                       2.78+0.1 - 0.72]) {
-                cube([tip_xlen + 0.1, tip_ylen, 0.72]);
+    pawl_r = 4.25;     // a big bevel, big radius for pawl tips
+    pawl_r_sm = 3.8;   // a big bevel, small radius for pawl stems
+    pawl_z = 2.78;
+
+    difference () {
+        intersection () {
+            union () {
+                translate([(7.53/2)*-1, (tip_ylen/2)*-1, 0])
+                    cube([7.53, tip_ylen, pawl_z+0.1]);
+
+                // Pawl tip front
+                translate([(7.53/2 + tip_xlen)*-1, (tip_ylen/2)*-1,
+                           pawl_z+0.1 - 0.72]) {
+                    cube([tip_xlen + 0.1, tip_ylen, 0.72]);
+                }
+                // Pawl tip rear
+                translate([7.53/2 - 0.1, (tip_ylen/2)*-1,
+                           pawl_z+0.1 - 0.72]) {
+                    cube([tip_xlen + 0.1, tip_ylen, 0.72]);
+                }
             }
-            // Pawl tip rear
-            translate([7.53/2 - 0.1, (tip_ylen/2)*-1,
-                       2.78+0.1 - 0.72]) {
-                cube([tip_xlen + 0.1, tip_ylen, 0.72]);
+
+            // Big bevel
+            $fn = 36;
+            union () {
+                translate([0, 0, pawl_z+0.1 - 0.72])
+                    cylinder(pawl_z+0.1, pawl_r, pawl_r);
+                cylinder(pawl_z+0.1, pawl_r_sm, pawl_r_sm);
             }
         }
 
