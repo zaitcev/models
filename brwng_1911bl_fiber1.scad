@@ -1,5 +1,8 @@
 // Browning 1911-22/1911-380 (not "Pro"), the front sight with fiber optics
 
+// This version is intended to be printed with a brim, then sanded up.
+// The fiber rod is 1.5 mm or 0.060".
+
 stock_width = 3.21;
 stock_length = 12.7;
 stock_height = 3.35; // rear only - remember that sight must be slanted
@@ -19,7 +22,10 @@ shear_top = shear_rod + 0.001;
 
 rod_dia = 1.5 + 0.2;
 
-pawl_z = 2.78;
+// The measured pawl_z is 2.78. However, we have to print on a brim,
+// and then remove the material with a file. So, we increase pawl_z
+// by the thickness of the brim.
+pawl_z = 3.4;
 
 module rod_channel () {
     $fn = 9;
@@ -29,11 +35,12 @@ module rod_channel () {
 
 module rod_slot () {
     // translate([0, (rod_dia*1.3)/2)*-1, 0])
-    //     cube([stock_length*0.35, rod_dia*1.3, 7]);
+    //     cube([stock_length*0.33, rod_dia*1.3, 7]);
 
-    // This version cuts away everything, in order to collect more light.
+    // This version cuts away the sides, in order to collect more light.
+    // But it cannot be too long, or the loops become fragile.
     translate([0, ((stock_width+0.2)/2)*-1, 0])
-        cube([stock_length*0.35, stock_width+0.2, 7]);
+        cube([stock_length*0.33, stock_width+0.2, 7]);
 }
 
 // We center the whole part on the center of the attachment.
@@ -74,11 +81,18 @@ module main_body () {
                             [        0,   0,   0,   1]])
             {
                 // The two central slots
-                translate([(stock_length*0.35 + 0.5)*-1, 0, 0.20])
+                translate([(stock_length*0.35 + 0.5)*-1, 0, 0.25])
                     rod_slot();
-                translate([0.5, 0, 0.20])
+                translate([0.5, 0, 0.25])
                     rod_slot();
             }
+        }
+
+        // Slant the front for pure aesthetics.
+        translate([-9.5, 0, 0.8]) {
+            rotate(10, [0,1,0])
+                translate([0, ((stock_width+0.2)/2)*-1, 0])
+                    cube([3, stock_width+0.2, 7]);
         }
     }
 }
@@ -87,9 +101,9 @@ module latch_pawls () {
     // Total X is 8.34 at the ends of the pawls.
     tip_xlen = (8.34-7.53)/2 + 0.2;  // 0.2 for experiments
     tip_ylen = 2.85;
-    tip_zlen = 0.72;
+    tip_zlen = pawl_z - 1.95;
 
-    flex_zlen = 2.45;
+    flex_zlen = pawl_z - 0.33;
 
     pawl_r = 4.25;     // a big bevel, big radius for pawl tips
     pawl_r_sm = 3.8;   // a big bevel, small radius for pawl stems
