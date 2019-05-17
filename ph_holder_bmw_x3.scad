@@ -8,6 +8,7 @@
 bmw_x3_2019_depth = 18.0;
 bmw_x3_2019_bezel = 16.0;
 bmw_x3_2019_angle = 28.0;  // degrees
+bmw_x3_2019_angrid = 26.0;  // degrees
 
 // initial was 38?
 bmw_x3_cluster_to_dash = 48;
@@ -55,16 +56,13 @@ module basket(width, depth, height) {
                 cube([width + 2*thickness,
                       depth + 2*thickness,
                       height + thickness]);
-                translate([thickness,
-                           thickness,
-                           thickness]) {
+                translate([thickness, thickness, thickness]) {
                     cube([width, depth, height+0.1]);
                 }
             }
 
             // Front panel cutout
-            translate([thickness+bezel, -0.1,
-                       thickness+bezel]) {
+            translate([thickness+bezel, -0.1, thickness+bezel]) {
                 cube([width - 2*bezel,
                       thickness + 0.2,
                       height + 0.1 - bezel]);
@@ -72,23 +70,19 @@ module basket(width, depth, height) {
         }
 
         // Power connector cutout
-        translate([thickness + width/2 - conn_width/2,
-                   -0.1, -0.1])
-            cube([conn_width,
-                  conn_depth + 0.1,
-                  bezel + 0.2]);
+        translate([thickness + width/2 - conn_width/2, -0.1, -0.1])
+            cube([conn_width, conn_depth + 0.1, bezel + 0.2]);
     }
 
     // We add a rib on top, just to be nice.
     // The basket is stiff enough without it.
+    // We set it back by 1.0 in order to avoid a generated support.
     rib_dia = thickness * 3.5;
-    translate ([0, depth + thickness*2 - 0.1,
+    translate ([0, depth + thickness*2 - 1.0 - 0.1,
                 height + thickness - rib_dia/2]) {
         rotate (90, [0, 1, 0]) {
-            // Making it shorter by 1.1 deconflicts it
-            // with the clamp.
-            basket_rib(width + thickness*2 - 1.1,
-                       rib_dia);
+            // Making it shorter by 1.1 deconflicts it with the clamp.
+            basket_rib(width + thickness*2 - 1.1, rib_dia);
         }
     }
 
@@ -157,25 +151,36 @@ module clamp_body(depth, bezel, length) {
 
     // spine
     cube([thickness, depth + thickness*2, length]);
-    // front
-    cube([bezel + thickness + clamp_ridge_radius*0.95,
-          thickness, length]);
     // back
     translate([0, depth+thickness, 0])
         clamp_rear_plate(thickness, length);
+}
 
-    translate ([thickness + bezel,
-                thickness - clamp_ridge_radius*0.5,
-                0]) {
-        // This intersection makes a half-cylinder.
-        intersection () {
-            cylinder(length,
-                     clamp_ridge_radius,
-                     clamp_ridge_radius);
-            translate([-1*(clamp_ridge_radius+0.1), 0, 0])
-                cube([clamp_ridge_radius*2 + 0.1,
-                      clamp_ridge_radius + 0.1,
-                      length]);
+// Well, it was a mistake to rotate the whole clamp. Its shape is not
+// just a couple of cubes, so we ended with painful double translations.
+// We're moving elements of the old, rotated body into the new, straight body.
+module clamp_body_2(depth, bezel, length) {
+    thickness = 2.0;  // clamp's "wall" or outline
+    clamp_ridge_radius = 3;
+
+    rotate (bmw_x3_2019_angrid, [0, 1, 0]) {
+        // front
+        cube([bezel + thickness + clamp_ridge_radius*1.3,
+              thickness, length]);
+    }
+
+    rotate (bmw_x3_2019_angrid, [0, 1, 0]) {
+        translate ([thickness + bezel + clamp_ridge_radius*0.4,
+                    thickness - clamp_ridge_radius*0.5, 0]) {
+            // This intersection makes a half-cylinder (almost, by 1.0).
+            intersection () {
+                $fn = 12;
+                cylinder(length, clamp_ridge_radius, clamp_ridge_radius);
+                translate([-1*(clamp_ridge_radius+0.1), 1.0, 0])
+                    cube([clamp_ridge_radius*2 + 0.1,
+                          clamp_ridge_radius + 0.1,
+                          length]);
+            }
         }
     }
 }
@@ -193,6 +198,7 @@ module clamp_located(depth, bezel, angle) {
                 clamp_set_height]) {
         rotate (angle, [0, 1, 0])
             clamp_body(depth, bezel, clamp_length);
+        clamp_body_2(depth, bezel, clamp_length);
     }
 }
 
