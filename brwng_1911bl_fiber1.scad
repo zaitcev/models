@@ -1,9 +1,8 @@
 // Browning 1911-22/1911-380 (not "Pro"), the front sight with fiber optics
 
-// This version is intended to be printed with a brim, then sanded up.
 // The fiber rod is 1.5 mm or 0.060".
 
-stock_width = 3.21;
+stock_width = 3.26;
 stock_length = 12.7;
 stock_height = 3.35; // rear only - remember that sight must be slanted
 
@@ -25,7 +24,11 @@ rod_dia = 1.5 + 0.2;
 // The measured pawl_z is 2.78. However, we have to print on a brim,
 // and then remove the material with a file. So, we increase pawl_z
 // by the thickness of the brim.
-pawl_z = 3.4;
+pawl_z = 3.0;
+
+// The measured pawl_y is 2.85 in the thinnest part, 2.88 at the widest,
+// but these sizes make the the sight wobble a bit. We set it thicker.
+pawl_y = 2.9;
 
 module rod_channel () {
     $fn = 9;
@@ -33,14 +36,27 @@ module rod_channel () {
         cylinder(stock_length+0.2, rod_dia/2, rod_dia/2);
 }
 
-module rod_slot () {
+module rod_slot (slot_length) {
+
     // translate([0, (rod_dia*1.3)/2)*-1, 0])
-    //     cube([stock_length*0.33, rod_dia*1.3, 7]);
+    //     cube([slot_length, rod_dia*1.3, 7]);
 
     // This version cuts away the sides, in order to collect more light.
     // But it cannot be too long, or the loops become fragile.
-    translate([0, ((stock_width+0.2)/2)*-1, 0])
-        cube([stock_length*0.33, stock_width+0.2, 7]);
+    translate([0, ((stock_width+0.2)/2)*-1, 0]) {
+        union () {
+            cube([slot_length, stock_width+0.2, 7]);
+            translate([0, 0, 0]) {
+                rotate(-10, [0, 1, 0])
+                    cube([2, stock_width+0.2, 7]);
+            }
+            translate([slot_length, 0, 0]) {
+                rotate(10, [0, 1, 0])
+                    translate([-2, 0, 0])
+                        cube([2, stock_width+0.2, 7]);
+            }
+        }
+    }
 }
 
 // We center the whole part on the center of the attachment.
@@ -80,11 +96,9 @@ module main_body () {
                             [shear_rod,   0,   1,   0],
                             [        0,   0,   0,   1]])
             {
-                // The two central slots
-                translate([(stock_length*0.35 + 0.5)*-1, 0, 0.25])
-                    rod_slot();
-                translate([0.5, 0, 0.25])
-                    rod_slot();
+                slot_length = stock_length*0.7;
+                translate([(slot_length/2 + 0.1)*-1, 0, 0.25])
+                    rod_slot(slot_length);
             }
         }
 
@@ -98,12 +112,10 @@ module main_body () {
 }
 
 module latch_pawls () {
-    // Total X is 8.34 at the ends of the pawls.
-    tip_xlen = (8.34-7.53)/2 + 0.2;  // 0.2 for experiments
-    tip_ylen = 2.85;
-    tip_zlen = pawl_z - 1.95;
-
-    flex_zlen = pawl_z - 0.33;
+    tip_xlen = 0.8;
+    tip_ylen = pawl_y;
+    // Measured difference is 2.06, but somehow we need less.
+    tip_zlen = pawl_z - 1.92;
 
     pawl_r = 4.25;     // a big bevel, big radius for pawl tips
     pawl_r_sm = 3.8;   // a big bevel, small radius for pawl stems
@@ -111,15 +123,17 @@ module latch_pawls () {
     difference () {
         intersection () {
             union () {
-                translate([(7.53/2)*-1, (tip_ylen/2)*-1, 0])
-                    cube([7.53, tip_ylen, pawl_z+0.1]);
+                translate([(7.63/2)*-1, (tip_ylen/2)*-1, 0])
+                    cube([7.63, tip_ylen, pawl_z+0.1]);
 
                 // Pawl tip front
-                translate([(7.53/2 + tip_xlen)*-1, (tip_ylen/2)*-1, 0]) {
-                    cube([tip_xlen + 0.1, tip_ylen, tip_zlen]);
-                }
+                // (this is currently removed for the ease of installation)
+                // translate([(7.63/2 + tip_xlen)*-1, (tip_ylen/2)*-1, 0]) {
+                //    cube([tip_xlen + 0.1, tip_ylen, tip_zlen]);
+                // }
+
                 // Pawl tip rear
-                translate([7.53/2 - 0.1, (tip_ylen/2)*-1, 0]) {
+                translate([7.63/2 - 0.1, (tip_ylen/2)*-1, 0]) {
                     cube([tip_xlen + 0.1, tip_ylen, tip_zlen]);
                 }
             }
@@ -134,12 +148,6 @@ module latch_pawls () {
             }
         }
 
-        // Flex cut-out front
-        translate([-2.2, ((tip_ylen+0.2)/2)*-1, -0.1])
-            cube([1.1, tip_ylen + 0.2, flex_zlen+0.1]);
-        // Flex cut-out rear
-        translate([1.2, ((tip_ylen+0.2)/2)*-1, -0.1])
-            cube([1.1, tip_ylen+0.2, flex_zlen+0.1]);
     }
 }
 
