@@ -14,11 +14,14 @@ forlife_cover_1.stl
 forlife_cover_2.scad     A lid for ForLife Lucidity brew cup, with a handle
 forlife_cover_2.stl
 
+krydex_spacer_1.scad     A spacer for Glock 42 magazines in Krydex Gear poach
+krydex_spacer_1.stl      https://www.amazon.com/dp/B07L3DNPX3/
+
 mooney_anun_1.scad       A bezel for a single anunciator light in Mooney M20E
 mooney_anun_1.stl
 
 outlet_base.scad         A base for a wall outlet adapter tap for 6 outlets
-outlet_base.stl          https://www.amazon.com/gp/product/B073DM1XRL/
+outlet_base.stl          https://www.amazon.com/dp/B073DM1XRL/
 
 ph_holder_bmw_x3.scad    The 2019 BMW X3 phone holder
 ph_holder_bmw_x3.stl
