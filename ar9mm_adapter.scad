@@ -10,23 +10,43 @@ upp_length = well_length_main - 5.0;
 
 module body_lower ()
 {
-    rotate(180, [0, 1, 0]) {
-        union () {
-            difference () {
-                // Main body
-                translate([-well_length_main/2, -well_width/2, 0])
-                    cube([well_length_main, well_width, 73]);
-                // Magazine latch cutout
-                translate([(well_length_main/2 - 10)*-1,
-                           (well_width/2+0.1)*-1, 17.5]) {
-                    cube([10.0, 3.5, 6.5]);
+    corner_r = 2.0;
+
+    union () {
+        $fn = 12;
+        difference () {
+            // Main body
+            // Corners must be chamfered, or this does not fit into magwell.
+            translate([0, 0, -73]) {
+                hull () {
+                    translate([(well_length_main/2 - corner_r)*-1,
+                               (well_width/2 - corner_r), 0])
+                        cylinder(73, corner_r, corner_r);
+                    translate([(well_length_main/2 - corner_r)*-1,
+                               (well_width/2 - corner_r)*-1, 0])
+                        cylinder(73, corner_r, corner_r);
+                    translate([(well_length_main/2 - corner_r),
+                               (well_width/2 - corner_r), 0])
+                        cylinder(73, corner_r, corner_r);
+                    translate([(well_length_main/2 - corner_r),
+                               (well_width/2 - corner_r)*-1, 0])
+                        cylinder(73, corner_r, corner_r);
                 }
             }
-            // Magazine overtravel stop
-            translate([(well_length_main/2 - 10)*-1,
-                       (well_width/2+1.1)*-1, 17.5+6.5]) {
-                cube([10.0, 1.1+0.1, 9.0]);
+            // Magazine latch cutout
+            translate([(well_length_main/2 - 10 - 10.0),
+                       (well_width/2+0.1)*-1, (17.5+6.5)*-1]) {
+                cube([10.0, 3.5, 6.5]);
             }
+        }
+        // Magazine overtravel stop
+        translate([(well_length_main/2 - 10 - 10.0),
+                   (well_width/2+1.1)*-1, (17.5+6.5+9.0)*-1]) {
+            cube([10.0, 1.1+0.1, 9.0]);
+        }
+        // Bolt stop spine
+        translate([(well_length_main/2 - 0.1), (11.0/2)*-1, -73]) {
+            cube([2.0+0.1, 11.0, 73]);
         }
     }
 }
