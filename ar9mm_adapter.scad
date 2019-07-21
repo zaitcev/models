@@ -39,6 +39,11 @@ module body_lower ()
                        (well_width/2+0.1)*-1, (17.5+6.5)*-1]) {
                 cube([10.0, 2.5, 6.5]);
             }
+            // AR magazine latch chute, for easy insertion
+            translate([(well_length/2 - 10 - 10.0),
+                       (well_width/2 + 3.3)*-1, -3.5]) {
+                rotate(-22, [1,0,0]) cube([10.0, 3, 5]);
+            }
         }
         // AR magazine overtravel stop
         translate([(well_length/2 - 10 - 10.0),
@@ -75,11 +80,10 @@ module body_upper ()
         translate([((well_length/2 - upp_len_off) + 0.1)*-1, -6.0/2, 8.1-2.5])
             cube([upp_length+0.2, 6.0, 2.5+0.1]);
 
-        // Cutout to mount the ejector
-        translate([8.5, (8+3.7)*-1, -0.1])
-            cube([21, 8, 8.1+0.2]);
-        translate([8.5, (8+2)*-1, 8.1-2.5])
-            cube([21, 8, 2.5+0.1]);
+        // Feed ramp
+        translate([-25, 0, 9.7])
+            rotate(-90, [0,1,0])
+                cylinder(5, 5.8, 4.7);
     }
 }
 
@@ -100,50 +104,97 @@ module main_cavity (total_h) {
                     [   0,   0,   0,     1]])
     {
 
-        union () {
+        difference () {
 
-            // The top part is a prism, using the example layout for polyhedron
-            // from the OpenSCAD manual. However, we also shear it a little.
-            // Bottom layout is counter-clockwise:
-            //    A   D
-            //    B   C
+            union () {
 
-            translate([(base_len/2)*-1, (base_w/2)*-1, (total_h - roof_th)]) {
+                // The top part is a prism, using the example layout for
+                // polyhedron from the OpenSCAD manual. However, we also
+                // shear it a little. Bottom layout is counter-clockwise:
+                //    A   D
+                //    B   C
 
-                a1 = [0,        0, 0];
-                b1 = [base_len, 0, 0];
-                c1 = [base_len, base_w, 0];
-                d1 = [0,        base_w, 0];
+                translate([(base_len/2)*-1, (base_w/2)*-1,
+                           (total_h - roof_th)]) {
 
-                a2 = a1 + [0, ((base_w - roof_w)/2),    roof_th];
-                b2 = b1 + [0, ((base_w - roof_w)/2),    roof_th];
-                c2 = c1 + [0, ((base_w - roof_w)/2)*-1, roof_th];
-                d2 = d1 + [0, ((base_w - roof_w)/2)*-1, roof_th];
+                    a1 = [0,        0, 0];
+                    b1 = [base_len, 0, 0];
+                    c1 = [base_len, base_w, 0];
+                    d1 = [0,        base_w, 0];
 
-                faces = [
-                    [0,1,2,3],
-                    [4,5,1,0],
-                    [7,6,5,4],
-                    [5,6,2,1],
-                    [6,7,3,2],
-                    [7,4,0,3]];
+                    a2 = a1 + [0, ((base_w - roof_w)/2),    roof_th];
+                    b2 = b1 + [0, ((base_w - roof_w)/2),    roof_th];
+                    c2 = c1 + [0, ((base_w - roof_w)/2)*-1, roof_th];
+                    d2 = d1 + [0, ((base_w - roof_w)/2)*-1, roof_th];
 
-                polyhedron([a1, b1, c1, d1, a2, b2, c2, d2], faces);
+                    faces = [
+                        [0,1,2,3],
+                        [4,5,1,0],
+                        [7,6,5,4],
+                        [5,6,2,1],
+                        [6,7,3,2],
+                        [7,4,0,3]];
+
+                    polyhedron([a1, b1, c1, d1, a2, b2, c2, d2], faces);
+                }
+
+                translate([(base_len/2)*-1, (base_w/2)*-1, 0]) {
+                    cube([base_len, base_w, (total_h - roof_th) + 0.1]);
+                }
+
+                // This side extension is needed because the side walls are
+                // much too thin to be reliably printed on basic equipment.
+                // So, we destroy side walls on purpose. Of course, we leave
+                // the lower belt intact. The width is large enough to affect
+                // the magazine overtravel stop.
+                translate([(base_len/2 - 3.9)*-1,
+                           ((base_w + 4)/2)*-1, 8.0 + 0.2]) {
+                    cube([base_len - 3.9, base_w + 4, total_h - roof_th - 8.0]);
+                }
             }
 
-            translate([(base_len/2)*-1, (base_w/2)*-1, 0]) {
-                cube([base_len, base_w, (total_h - roof_th) + 0.1]);
+            // This little extension both serves as an over-travel stop
+            // and adds a little material to pad the or small feed ramp.
+            translate([(base_len/2 + 0.1)*-1, (19.0/2)*-1, (total_h - 8.5)]) {
+                cube([1.5, 19.0, 11]);
             }
 
-            // This side extension is needed because the side walls are
-            // much too thin to be reliably printed on basic equipment.
-            // So, we destroy side walls on purpose. Of course, we leave
-            // the lower belt intact. The width is large enough to affect
-            // the magazine overtravel stop.
-            translate([(base_len/2)*-1, ((base_w + 4)/2)*-1, 8.0 + 0.2]) {
-                cube([base_len, base_w + 4, (total_h - roof_th - 8.0)]);
+            // These "side wings" prevent the magazine from tilting sideways
+            // while being inserted. It's mostly for user's convenience.
+            translate([(base_len/2)*-1, ((base_w + 20.5)/2)*-1, 0]) {
+                rotate(45, [0,0,1])
+                    cube([10, 10, (total_h)]);
+            }
+            translate([(base_len/2)*-1, ((base_w - 7.9)/2), 0]) {
+                rotate(45, [0,0,1])
+                    cube([10, 10, (total_h)]);
             }
         }
+    }
+}
+
+// The root of the ejector is 1.38 thick, 7.5 wide. Length TBD.
+module ejector_cavity () {
+
+    depth = 30.0;  // excessive on purpose - should be called "cut_length"?
+
+    union () {
+
+        translate([13, -3.8, 5.0]) {
+            rotate(60.0, [0, 1, 0]) {
+
+                // The main pocket is a pocket at 60 degrees.
+                // we center the cube so that it rotates in a predictable way
+                translate([(depth/2)*-1, (1.7/2)*-1, (7.9/2)*-1])
+                    cube([depth, 1.7, 7.9]);
+
+                // We also add an inspection hole.
+                translate([depth/2, 0, 0])
+                    rotate(90, [1, 0, 0])
+                        cylinder(20, 3, 3);
+            }
+        }
+
     }
 }
 
@@ -153,10 +204,13 @@ difference () {
         body_upper();
     }
 
+    ejector_cavity();
+
     translate([6.0, 0, (74.0 + 0.1)*-1])
         main_cavity(83.5);
 
     // Inspection hole for the prototype, matches pistol magazine latch
-    translate([-21.0, 0, -34.2])
-        cube([5.7, 20, 4.8]);
+    translate([-22.0, -7, -36.5])
+        rotate(-11.5, [0,1,0])
+            cube([10, 20, 4.8]);
 }
