@@ -81,9 +81,9 @@ module body_upper ()
             cube([upp_length+0.2, 6.0, 2.5+0.1]);
 
         // Feed ramp
-        translate([-25, 0, 9.7])
-            rotate(-90, [0,1,0])
-                cylinder(5, 5.8, 4.7);
+        translate([-23.0, 0, 8.0])
+            rotate(-60, [0,1,0])
+                cylinder(7, 5.0, 4.7);
     }
 }
 
@@ -154,9 +154,20 @@ module main_cavity (total_h) {
             }
 
             // This little extension both serves as an over-travel stop
-            // and adds a little material to pad the or small feed ramp.
+            // and adds a little material to pad our small feed ramp.
             translate([(base_len/2 + 0.1)*-1, (19.0/2)*-1, (total_h - 8.5)]) {
-                cube([1.5, 19.0, 11]);
+                difference () {
+                    $fn = 30;
+                    // The "main" cut-out that forms the over-travel stop
+                    // at the bottom and the feed ramp at the top.
+                    cube([3.0, 19.0, 11]);
+                    // The vertical cylinder is a channel for the bullet tip.
+                    translate([6.0, 19.0/2, -0.1]) cylinder(11.2, 5.0, 5.0);
+                    // The horizontal cylinder is for the follower when empty.
+                    translate([6.0, -0.1, -2.0])
+                        rotate(-90, [1, 0, 0])
+                            cylinder(19.2, 5.0, 5.0);
+                }
             }
 
             // These "side wings" prevent the magazine from tilting sideways
@@ -180,11 +191,13 @@ module ejector_cavity () {
 
     union () {
 
-        translate([13, -3.8, 5.0]) {
+        translate([16, -3.8, 5.0]) {
+
             rotate(60.0, [0, 1, 0]) {
 
-                // The main pocket is a pocket at 60 degrees.
-                // we center the cube so that it rotates in a predictable way
+                // The main pocket is a pocket at 60 degrees, documented
+                // in ar9mm_02_ejector.xcf. We center the cube so that it
+                // rotates in a predictable way.
                 translate([(depth/2)*-1, (1.7/2)*-1, (7.9/2)*-1])
                     cube([depth, 1.7, 7.9]);
 
@@ -213,4 +226,15 @@ difference () {
     translate([-22.0, -7, -36.5])
         rotate(-11.5, [0,1,0])
             cube([10, 20, 4.8]);
+
+    // XXX design observation and a measurement hole
+    // translate([-25.5, 0, -3.8])
+    //     cube([5, 20, 5]);
+
+    translate([-27.0, -13.0, -72.0])
+        rotate(90, [1,0,0])
+            linear_extrude(height=1.0) text("Fraurem", size=5);
+    translate([15.0, -13.0, -72.0])
+        rotate(90, [1,0,0])
+            linear_extrude(height=1.0) text("PPQ", size=5);
 }
