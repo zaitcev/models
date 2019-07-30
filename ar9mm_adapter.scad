@@ -77,13 +77,20 @@ module body_upper ()
         }
 
         // Channel for the bottom of the bolt
-        translate([((well_length/2 - upp_len_off) + 0.1)*-1, -6.0/2, 8.1-2.5])
-            cube([upp_length+0.2, 6.0, 2.5+0.1]);
+        // Available bolt has the bottom sticking down just a little less.
+        // We do not know yet if this is how all 9mm bolts are. Nonethless,
+        // front part of the channel is a little shallower.
+
+        translate([14*-1, -6.0/2, 8.1-2.5])
+            cube([upp_length-15, 6.0, 2.5+0.1]);
+
+        translate([((well_length/2 - upp_len_off) + 0.1)*-1, -5.0/2, 8.1-1.5])
+            cube([16, 5.0, 1.5+0.1]);
 
         // Feed ramp
-        translate([-23.0, 0, 8.0])
-            rotate(-60, [0,1,0])
-                cylinder(7, 5.0, 4.7);
+        translate([-23.0, 0, 7.5])
+            rotate(-50, [0,1,0])
+                cylinder(7, 4.0, 3.5);
     }
 }
 
@@ -160,9 +167,9 @@ module main_cavity (total_h) {
                     $fn = 30;
                     // The "main" cut-out that forms the over-travel stop
                     // at the bottom and the feed ramp at the top.
-                    cube([3.0, 19.0, 11]);
+                    cube([5.0, 19.0, 11]);
                     // The vertical cylinder is a channel for the bullet tip.
-                    translate([6.0, 19.0/2, -0.1]) cylinder(11.2, 5.0, 5.0);
+                    translate([6.0, 19.0/2, -0.1]) cylinder(11.2, 5.5, 3.5);
                     // The horizontal cylinder is for the follower when empty.
                     translate([6.0, -0.1, -2.0])
                         rotate(-90, [1, 0, 0])
