@@ -46,9 +46,15 @@ module body_lower ()
             }
         }
         // AR magazine overtravel stop
+        // This includes a little buttress, which replaces automatically
+        // generated support lattice. Saves material, prints faster.
         translate([(well_length/2 - 10 - 10.0),
                    (well_width/2+1.1)*-1, (17.5+6.5+9.0)*-1]) {
             cube([10.0, 1.1+0.1, 9.0]);
+        }
+        translate([(well_length/2 - 10 - 10.0),
+                   (well_width/2-0.14)*-1, (17.5+6.5+9.0+2.14)*-1]) {
+            rotate(30, [1,0,0]) cube([10.0, 1.5, 2.5]);
         }
         // Bolt stop spine
         translate([(well_length/2 - 0.1), (11.0/2)*-1, lower_h*-1]) {
