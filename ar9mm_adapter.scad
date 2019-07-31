@@ -88,9 +88,9 @@ module body_upper ()
             cube([16, 5.0, 1.5+0.1]);
 
         // Feed ramp
-        translate([-23.0, 0, 7.5])
+        translate([-19.0, 0, 7.5])
             rotate(-50, [0,1,0])
-                cylinder(7, 4.0, 3.5);
+                cylinder(7, 4.5, 4.5);
     }
 }
 
@@ -114,6 +114,13 @@ module main_cavity (total_h) {
         difference () {
 
             union () {
+
+                // We add a little cut on top, because our prism below is
+                // too small.
+                translate([(base_len/2 - 10)*-1, (11.8/2)*-1,
+                           (total_h - 0.1)]) {
+                     cube([base_len - 10, 11.8, 5]);
+                }
 
                 // The top part is a prism, using the example layout for
                 // polyhedron from the OpenSCAD manual. However, we also
@@ -148,16 +155,6 @@ module main_cavity (total_h) {
                 translate([(base_len/2)*-1, (base_w/2)*-1, 0]) {
                     cube([base_len, base_w, (total_h - roof_th) + 0.1]);
                 }
-
-                // This side extension is needed because the side walls are
-                // much too thin to be reliably printed on basic equipment.
-                // So, we destroy side walls on purpose. Of course, we leave
-                // the lower belt intact. The width is large enough to affect
-                // the magazine overtravel stop.
-                translate([(base_len/2 - 3.9)*-1,
-                           ((base_w + 4)/2)*-1, 8.0 + 0.2]) {
-                    cube([base_len - 3.9, base_w + 4, total_h - roof_th - 8.0]);
-                }
             }
 
             // This little extension both serves as an over-travel stop
@@ -174,6 +171,10 @@ module main_cavity (total_h) {
                     translate([6.0, -0.1, -2.0])
                         rotate(-90, [1, 0, 0])
                             cylinder(19.2, 5.0, 5.0);
+                    // Right hand side has a lip, needs clearance.
+                    translate([2.2, 13.5, 1.0])
+                        rotate(35, [0,1,0])
+                            cube([2, 3.5, 7]);
                 }
             }
 
@@ -218,6 +219,57 @@ module ejector_cavity () {
     }
 }
 
+
+// This side extension is needed because the side walls are
+// much too thin to be reliably printed on basic equipment.
+// So, we destroy side walls on purpose. Of course, we leave
+// the lower belt intact. The width of this has to be large
+// enough to affect the overtravel stop of the AR magazine.
+
+// translate([(base_len/2 - 3.9)*-1,
+//            ((base_w + 4)/2)*-1, 12.0 + 0.2]) {
+//     cube([base_len - 3.9, base_w + 4,
+//           total_h - roof_th - 12.0]);
+// }
+
+module technical_side_cut () {
+
+    // The top part is a prism, using the example layout for
+    // polyhedron from the OpenSCAD manual. However, we also
+    // shear it a little. Bottom layout is counter-clockwise:
+    //    A   D
+    //    B   C
+
+    tech_x = 28.6;
+    tech_y = 27;
+    tech_z1 = 52.7;
+    tech_z2 = 50.3;
+
+    translate([-11.8, (tech_y/2)*-1, -66.0]) {
+
+        a1 = [     0,      0, 0];
+        b1 = [tech_x,      0, 0];
+        c1 = [tech_x, tech_y, 0];
+        d1 = [     0, tech_y, 0];
+
+        a2 = a1 + [-6.6,  0, tech_z1];
+        b2 = b1 + [-6.2,  0, tech_z2];
+        c2 = c1 + [-6.2,  0, tech_z2];
+        d2 = d1 + [-6.6,  0, tech_z1];
+
+        faces = [
+            [0,1,2,3],
+            [4,5,1,0],
+            [7,6,5,4],
+            [5,6,2,1],
+            [6,7,3,2],
+            [7,4,0,3]];
+
+        polyhedron([a1, b1, c1, d1, a2, b2, c2, d2], faces);
+    }
+
+}
+
 difference () {
     union () {
         body_lower();
@@ -226,12 +278,15 @@ difference () {
 
     ejector_cavity();
 
-    translate([6.0, 0, (74.0 + 0.1)*-1])
-        main_cavity(83.5);
+    translate([2.0, 0, -76.9])
+        rotate(5, [0,1,0])
+            main_cavity(83.5);
+
+    technical_side_cut();
 
     // Inspection hole for the prototype, matches pistol magazine latch
     translate([-22.0, -7, -36.5])
-        rotate(-11.5, [0,1,0])
+        rotate(-6.8, [0,1,0])
             cube([10, 20, 4.8]);
 
     // XXX design observation and a measurement hole
