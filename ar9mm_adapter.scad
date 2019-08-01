@@ -94,9 +94,9 @@ module body_upper ()
             cube([16, 5.0, 1.5+0.1]);
 
         // Feed ramp
-        translate([-19.0, 0, 7.5])
+        translate([-16.0, 0, 7.5])
             rotate(-50, [0,1,0])
-                cylinder(7, 4.5, 4.5);
+                cylinder(7, 6.0, 5.5);
     }
 }
 
@@ -147,13 +147,8 @@ module main_cavity (total_h) {
                     c2 = c1 + [0, ((base_w - roof_w)/2)*-1, roof_th];
                     d2 = d1 + [0, ((base_w - roof_w)/2)*-1, roof_th];
 
-                    faces = [
-                        [0,1,2,3],
-                        [4,5,1,0],
-                        [7,6,5,4],
-                        [5,6,2,1],
-                        [6,7,3,2],
-                        [7,4,0,3]];
+                    faces = [[0,1,2,3], [4,5,1,0], [7,6,5,4],
+                             [5,6,2,1], [6,7,3,2], [7,4,0,3]];
 
                     polyhedron([a1, b1, c1, d1, a2, b2, c2, d2], faces);
                 }
@@ -172,7 +167,7 @@ module main_cavity (total_h) {
                     // at the bottom and the feed ramp at the top.
                     cube([5.0, 19.0, 11]);
                     // The vertical cylinder is a channel for the bullet tip.
-                    translate([6.0, 19.0/2, -0.1]) cylinder(11.2, 5.5, 3.5);
+                    translate([6.0, 19.0/2, -0.1]) cylinder(11.2, 5.0, 3.5);
                     // The horizontal cylinder is for the follower when empty.
                     translate([6.0, -0.1, -2.0])
                         rotate(-90, [1, 0, 0])
@@ -225,84 +220,183 @@ module ejector_cavity () {
     }
 }
 
-
 // This side extension is needed because the side walls are
 // much too thin to be reliably printed on basic equipment.
 // So, we destroy side walls on purpose. Of course, we leave
 // the lower belt intact. The width of this has to be large
 // enough to affect the overtravel stop of the AR magazine.
 
-// translate([(base_len/2 - 3.9)*-1,
-//            ((base_w + 4)/2)*-1, 12.0 + 0.2]) {
-//     cube([base_len - 3.9, base_w + 4,
-//           total_h - roof_th - 12.0]);
-// }
-
 module technical_side_cut () {
 
-    // The top part is a prism, using the example layout for
-    // polyhedron from the OpenSCAD manual. However, we also
-    // shear it a little. Bottom layout is counter-clockwise:
+    // Bottom layout is counter-clockwise:
     //    A   D
     //    B   C
 
-    tech_x = 28.6;
+    tech_x = 28.7;
     tech_y = 27;
-    tech_z1 = 52.7;
-    tech_z2 = 50.3;
+    tech_z1 = 54.4;
+    tech_z2 = 52.0;
 
-    translate([-11.8, (tech_y/2)*-1, -66.0]) {
+    translate([-11.7, (tech_y/2)*-1, -66.0]) {
 
         a1 = [     0,      0, 0];
         b1 = [tech_x,      0, 0];
         c1 = [tech_x, tech_y, 0];
         d1 = [     0, tech_y, 0];
 
-        a2 = a1 + [-6.6,  0, tech_z1];
-        b2 = b1 + [-6.2,  0, tech_z2];
-        c2 = c1 + [-6.2,  0, tech_z2];
-        d2 = d1 + [-6.6,  0, tech_z1];
+        a2 = a1 + [-6.7,  0, tech_z1];
+        b2 = b1 + [-6.55,  0, tech_z2];
+        c2 = c1 + [-6.55,  0, tech_z2];
+        d2 = d1 + [-6.7,  0, tech_z1];
 
-        faces = [
-            [0,1,2,3],
-            [4,5,1,0],
-            [7,6,5,4],
-            [5,6,2,1],
-            [6,7,3,2],
-            [7,4,0,3]];
+        faces = [[0,1,2,3], [4,5,1,0], [7,6,5,4],
+                 [5,6,2,1], [6,7,3,2], [7,4,0,3]];
 
         polyhedron([a1, b1, c1, d1, a2, b2, c2, d2], faces);
     }
-
 }
 
-difference () {
-    union () {
-        body_lower();
-        body_upper();
+// This is the cut-out for the pistol magazine latch.
+module latch_big_cut () {
+
+    width1 = 8.8;
+    width2 = 16.0;
+    width3 = 27;
+
+    difference () {
+        union () {
+
+            // A tall and narrow cut for the spring.
+            translate([-30.0, (width1/2)*-1, -70.5])
+                rotate(-6.0, [0,1,0])
+                    cube([15, width1, 36.0]);
+
+            // The main body, shaped as inverted "L".
+            translate([-32.8, 0, -75.5]) {
+                rotate(-3.0, [0,1,0])
+                    union () {
+                        translate([0, (width2/2)*-1, 0])
+                            cube([15, width2, 44]);
+                        translate([9.0, (width3/2)*-1, 37.0])
+                            cube([11.0, width3, 7.0]);
+                    }
+            }
+
+            // Removal of the support material above the latch bridge.
+            translate([-17.1, 0, -27.3])
+                rotate(40, [0,1,0])
+                    cube([9.0, width3, 18], center=true);
+        }
+
+        // Removal of the support material above the button.
+        translate([-28.1, 10.5, -31.9])
+            rotate(40, [1,0,0])
+                cube([4.0, 15, 15], center=true);
+        translate([-28.1, -10.5, -31.9])
+            rotate(-40, [1,0,0])
+                cube([4.0, 15, 15], center=true);
     }
-
-    ejector_cavity();
-
-    translate([2.0, 0, -76.9])
-        rotate(5, [0,1,0])
-            main_cavity(83.5);
-
-    technical_side_cut();
-
-    // Inspection hole for the prototype, matches pistol magazine latch
-    translate([-22.0, -7, -36.5])
-        rotate(-6.8, [0,1,0])
-            cube([10, 20, 4.8]);
-
-    // XXX design observation and a measurement hole
-    // translate([-25.5, 0, -3.8])
-    //     cube([5, 20, 5]);
-
-    translate([-27.0, -13.0, -72.0])
-        rotate(90, [1,0,0])
-            linear_extrude(height=1.0) text("Fraurem", size=5);
-    translate([15.0, -13.0, -72.0])
-        rotate(90, [1,0,0])
-            linear_extrude(height=1.0) text("PPQ", size=5);
 }
+
+module latch_see_saw_side () {
+    thickness = 2.0;
+    hull () {
+        cube([41.0, thickness, 3.0], center=true);
+        translate([3.0, (thickness/2), 1.5])
+            rotate(90, [1,0,0])
+                cylinder(thickness, 2.0, 2.0);
+    }
+}
+
+module latch_see_saw_bridge () {
+    difference () {
+        union () {
+            translate([0, -9.7, 0])
+                cube([6.1, 2.7, 4.0], center=true);
+            translate([0, 9.7, 0])
+                cube([6.1, 2.7, 4.0], center=true);
+            translate([-3.2, 0, 0])
+                cube([4.5, 22.1, 4.0], center=true);
+        }
+
+        // Make a slanted side that alleviates the support material.
+        translate([-7.2, 0, -0.1])
+            rotate(-30, [0,1,0])
+                cube([4.5, 22.3, 7.0], center=true);
+    }
+}
+
+module latch_see_saw_button () {
+    width = 14.0;
+    translate([0, (width/2)*-1, 0.0])
+        cube([3.0, width, 10.0]);
+}
+
+module latch_see_saw_spring () {
+    width = 7.0;
+    translate([-18.0, (width/2)*-1, -73.0])
+        rotate(-6.9, [0,1,0])
+            cube([3.0, width, 40.0]);
+}
+
+module latch_see_saw () {
+    union () {
+        translate([-23.3, 0, -53.4])
+            rotate(92.0, [0,1,0])
+        {
+            union () {
+                translate([0, -5.7, 0])
+                    latch_see_saw_side();
+                translate([0, 5.7, 0])
+                    latch_see_saw_side();
+            }
+        }
+        translate([-18.5, 0, -33.7])
+            rotate(-7.0, [0,1,0])
+                latch_see_saw_bridge();
+        translate([-25.5, 0, -74.0])
+            latch_see_saw_button();
+
+        latch_see_saw_spring();
+    }
+}
+
+module adapter () {
+    difference () {
+        union () {
+            body_lower();
+            body_upper();
+        }
+
+        ejector_cavity();
+
+        translate([2.0, 0, -75.7])
+            rotate(5, [0,1,0])
+                main_cavity(83.7);
+
+        technical_side_cut();
+
+        latch_big_cut();
+
+        // XXX design observation and a measurement hole - do not print
+        // translate([-25.5, 0, -3.8])
+        //    cube([5, 20, 5]);
+
+        // Text banners
+        translate([-27.0, -13.0, -72.0])
+            rotate(90, [1,0,0])
+                linear_extrude(height=1.0) text("Fraurem", size=5);
+        translate([15.0, -13.0, -72.0])
+            rotate(90, [1,0,0])
+                linear_extrude(height=1.0) text("PPQ", size=5);
+    }
+}
+
+module main () {
+    union () {
+        adapter();
+        latch_see_saw();
+    }
+}
+
+main();
