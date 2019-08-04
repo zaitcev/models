@@ -172,10 +172,14 @@ module main_cavity (total_h) {
                     translate([6.0, -0.1, -2.0])
                         rotate(-90, [1, 0, 0])
                             cylinder(19.2, 5.0, 5.0);
-                    // Right hand side has a lip, needs clearance.
-                    translate([2.2, 13.5, 1.0])
+                    // This extra cut was originally done because the magazine
+                    // is not symmetric: the right side lip is taller and hits
+                    // the ramp buttress. However, we found that this cut
+                    // removes the support material, so we extended it all
+                    // the way across, including the left side.
+                    translate([2.2, 2, 1.0])
                         rotate(35, [0,1,0])
-                            cube([2, 3.5, 7]);
+                            cube([2, 15, 7]);
                 }
             }
 
@@ -277,8 +281,8 @@ module latch_big_cut () {
                     union () {
                         translate([0, (width2/2)*-1, 0])
                             cube([15, width2, 44]);
-                        translate([9.0, (width3/2)*-1, 37.0])
-                            cube([11.0, width3, 7.0]);
+                        translate([9.0, (width3/2)*-1, 36.5])
+                            cube([11.0, width3, 7.5]);
                     }
             }
 
@@ -289,10 +293,10 @@ module latch_big_cut () {
         }
 
         // Removal of the support material above the button.
-        translate([-28.1, 10.5, -31.9])
+        translate([-28.1, 10.2, -32.3])
             rotate(40, [1,0,0])
                 cube([4.0, 15, 15], center=true);
-        translate([-28.1, -10.5, -31.9])
+        translate([-28.1, -10.2, -32.3])
             rotate(-40, [1,0,0])
                 cube([4.0, 15, 15], center=true);
     }
@@ -309,20 +313,29 @@ module latch_see_saw_side () {
 }
 
 module latch_see_saw_bridge () {
+    height = 4.0;
     difference () {
         union () {
-            translate([0, -9.7, 0])
-                cube([6.1, 2.7, 4.0], center=true);
-            translate([0, 9.7, 0])
-                cube([6.1, 2.7, 4.0], center=true);
             translate([-3.2, 0, 0])
-                cube([4.5, 22.1, 4.0], center=true);
+                cube([4.5, 22.1, height], center=true);
+
+            translate([0, -9.7, 0])
+                cube([6.0, 2.7, height], center=true);
+            translate([0, 9.7, 0])
+                cube([6.0, 2.7, height], center=true);
+
+            translate([-1.0, 8.7, 0])
+                rotate(-45, [0,0,1])
+                    cube([2.0, 3, height], center=true);
+            translate([-1.0, -8.7, 0])
+                rotate(45, [0,0,1])
+                    cube([2.0, 3, height], center=true);
         }
 
         // Make a slanted side that alleviates the support material.
-        translate([-7.2, 0, -0.1])
-            rotate(-30, [0,1,0])
-                cube([4.5, 22.3, 7.0], center=true);
+        translate([-7.0, 0, -0.1])
+            rotate(-32, [0,1,0])
+                cube([4.5, 22.3, 7.3], center=true);
     }
 }
 
@@ -334,9 +347,36 @@ module latch_see_saw_button () {
 
 module latch_see_saw_spring () {
     width = 7.0;
-    translate([-18.0, (width/2)*-1, -73.0])
-        rotate(-6.9, [0,1,0])
+    translate([-17.8, (width/2)*-1, -73.0]) {
+        rotate(-6.9, [0,1,0]) {
             cube([3.0, width, 40.0]);
+            translate([3.0/2, -3+width/2, 37])
+                rotate(40, [1,0,0])
+                    cube([3.0, 3, 6], center=true);
+            translate([3.0/2, 3+width/2, 37])
+                rotate(-40, [1,0,0])
+                    cube([3.0, 3, 6], center=true);
+        }
+    }
+}
+
+// The overtravel stop is necessary for a couple of reasons.
+// First, it prevents the user from breaking off the latch by mistake.
+// Second, when the bolt presses the magazine down (it does so through the
+// column of ammunition - it must never hit the magazine lips, of course),
+// the see-saw starts extending outward. The overtravel stop supports it
+// and makes it stronger.
+module latch_see_saw_stop () {
+    width = 20.0;
+    thickness = 3.8;
+    translate([0, (width/2)*-1, 0.0]) {
+        difference () {
+            cube([thickness, width, 7.0]);
+            translate([-0.1, width/2, -5])
+                rotate(90, [0,1,0])
+                    cylinder(thickness+0.2, 9, 9);
+        }
+    }
 }
 
 module latch_see_saw () {
@@ -356,6 +396,8 @@ module latch_see_saw () {
                 latch_see_saw_bridge();
         translate([-25.5, 0, -74.0])
             latch_see_saw_button();
+        translate([-30.2, 0, -69.0])
+            latch_see_saw_stop();
 
         latch_see_saw_spring();
     }
