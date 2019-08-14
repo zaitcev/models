@@ -11,13 +11,13 @@
 // maximum width from side to side
 // We had 26.0 on No.2, which was too tight. The 26.6 is a scootch too
 // wide, but we need that space for a 3M 144 glue strip.
-function f_butt_width() = 26.6;
+function f_butt_width() = 27.5;
 
 module main_body(height, base_height) {
 
     butt_width = f_butt_width();
 
-    side_r = 50;
+    side_r = 42;
     front_r = 13.6;
     back_r = 12.4;
 
@@ -42,22 +42,32 @@ module main_body(height, base_height) {
         }
 
         // Additional bevelling for the front strap
-        multmatrix(m = [[   1,   0,  -0.204, 0],
-                        [   0,   1,   0,     0],
-                        [   0,   0,   1,     0],
-                        [   0,   0,   0,     1]])
-        {
-            union () {
-                $fn = 40;
-                translate([-6.9, 0, 0])
-                    cylinder(base_height-1.0, front_r, front_r*1.08);
-                // small edge bevelling cone
-                translate([-6.9, 0, base_height-1.0])
-                    cylinder(3, front_r*1.08, front_r*0.98);
-                translate([-15.0, ((butt_width * 1.1)/2)*-1, 0])
-                    cube([60, butt_width * 1.1, height]);
-                translate([-20, ((butt_width * 1.1)/2)*-1, base_height+0.1])
-                    cube([60, butt_width * 1.1, (height-base_height)+0.1] );
+        union () {
+            multmatrix(m = [[   1,   0,  -0.195, 0],
+                            [   0,   1,   0,     0],
+                            [   0,   0,   1,     0],
+                            [   0,   0,   0,     1]])
+            {
+                union () {
+                    $fn = 40;
+                    translate([-6.9, 0, 0])
+                        cylinder(base_height-1.0, front_r*1.01, front_r*1.08);
+                    // small edge bevelling cone
+                    translate([-6.9, 0, base_height-1.0])
+                       cylinder(3, front_r*1.08, front_r*0.98);
+                }
+            }
+            multmatrix(m = [[   1,   0,  -0.27, 0],
+                            [   0,   1,   0,     0],
+                            [   0,   0,   1,     0],
+                            [   0,   0,   0,     1]])
+            {
+                union () {
+                    translate([-14.1, ((butt_width * 1.1)/2)*-1, 0])
+                        cube([60, butt_width * 1.1, height]);
+                    translate([-20.0, ((butt_width * 1.1)/2)*-1, base_height+0.1])
+                        cube([60, butt_width * 1.1, (height-base_height)+0.1] );
+                }
             }
         }
 
@@ -91,7 +101,7 @@ module main_body(height, base_height) {
                     cube([60, butt_width*2, (height + 4.5) / cos(14)]);
 
                     // 45-degree bevel for the top
-                    translate([9.7, -0.1, height + 10.0])
+                    translate([9.9, -0.1, height + 10.2])
                         rotate(45, [0, 1, 0])
                             cube([10, butt_width*2+0.2, 10]);
 
@@ -179,7 +189,6 @@ module mag_cavity(height) {
     }
 }
 
-// We will fix it up later (the front is a little narrower than the back).
 module grip_cavity(height) {
 
     cav_width_rear = f_mag_cav_width_rear();
@@ -196,9 +205,9 @@ module grip_cavity(height) {
     }
 
     // Scalloping for the glue strip.
-    translate([20, ((cav_width+0.9)/2)*-1, 15]) {
+    translate([20, ((cav_width+1.4)/2)*-1, 15]) {
         rotate(-14.7, [0, 1, 0])
-            cube([14, (cav_width+0.9), height]);
+            cube([14, (cav_width+1.4), height]);
     }
 
     // Note that the grip cavity has a little extension down, negative by Y,

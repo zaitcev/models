@@ -72,7 +72,7 @@ module sport_cavity (height) {
 module sport_body (height) {
     butt_width = f_butt_width();
 
-    side_r = 50;
+    side_r = 42;
     front_r = 13.6;
     back_r = 12.4;
 
@@ -142,7 +142,7 @@ module sport_body (height) {
                     translate([rear_face, 0, 0])
                         cylinder(height, back_r, back_r*1.4);
                     // wide cube
-                    translate([(rear_face + 3) - 100,
+                    translate([(rear_face + 4) - 100,
                                ((butt_width * 1.1)/2)*-1, 0])
                         cube([100, butt_width * 1.1, height]);
                 }
@@ -151,14 +151,12 @@ module sport_body (height) {
     }
 }
 
-module sport_funnel () {
-    difference () {
+difference () {
+    union () {
+        translate([0, 0, funnel_height])
+            g42k_base();
         sport_body(funnel_height); 
-        translate([0, 0, -0.1])
-            sport_cavity(funnel_height+0.2);
     }
+    translate([0, 0, -0.1])
+        sport_cavity(funnel_height+0.2);
 }
-
-translate([0, 0, funnel_height])
-    g42k_base();
-sport_funnel();
