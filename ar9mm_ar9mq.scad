@@ -4,4 +4,8 @@
 
 use <ar9mm_adapter.scad>;
 
+module main () {
+    adapter();
+}
+
 main();
