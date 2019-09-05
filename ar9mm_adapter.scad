@@ -1,5 +1,5 @@
 //
-// Basic adapter for PPQ
+// The main module for AR9MM family
 //
 
 well_width = 22.60;
@@ -440,5 +440,3 @@ module main () {
         latch_see_saw();
     }
 }
-
-main();
