@@ -403,7 +403,7 @@ module latch_see_saw () {
     }
 }
 
-module adapter () {
+module adapter_base () {
     difference () {
         union () {
             body_lower();
@@ -434,9 +434,9 @@ module adapter () {
     }
 }
 
-module main () {
+module adapter () {
     union () {
-        adapter();
+        adapter_base();
         latch_see_saw();
     }
 }
