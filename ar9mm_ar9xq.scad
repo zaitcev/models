@@ -48,6 +48,7 @@ module lrbho_cut () {
 module main () {
     difference () {
         adapter();
+        ejector_cavity();
         lrbho_cut();
     }
 }

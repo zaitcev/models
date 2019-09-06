@@ -410,8 +410,6 @@ module adapter_base () {
             body_upper();
         }
 
-        ejector_cavity();
-
         translate([2.0, 0, -75.7])
             rotate(5, [0,1,0])
                 main_cavity(83.7);
@@ -419,10 +417,6 @@ module adapter_base () {
         technical_side_cut();
 
         latch_big_cut();
-
-        // XXX design observation and a measurement hole - do not print
-        // translate([-25.5, 0, -3.8])
-        //    cube([5, 20, 5]);
 
         // Text banners
         translate([-27.0, -13.0, -72.0])
