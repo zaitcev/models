@@ -5,7 +5,10 @@
 use <ar9mm_adapter.scad>;
 
 module main () {
-    adapter();
+    difference () {
+        adapter();
+        ejector_cavity();
+    }
 }
 
 main();

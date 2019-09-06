@@ -3,7 +3,7 @@ Material: ABS
 Options for Cura and Lulzbot Mini:
   Setup: Custom (default Recommended)
     Adhesion
-      Adhesion type:  Skirt
+      Adhesion type:  Skirt    -- use Brim for AR9LQ
     Support
       Support Pattern:   ZigZag (default)
       Connect Support ZigZags: OFF  (default ON)
