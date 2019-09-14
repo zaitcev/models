@@ -1,5 +1,5 @@
 //
-// AR9LQ: The all-plastic experiment, including the ejector
+// AR9LQ: The all-plastic version, including the ejector, PPQ
 //
 
 use <ar9mm_adapter.scad>;
@@ -46,7 +46,7 @@ module ejector_support () {
             // Inner outline of the support
             translate([-5.2, 4.3, 2.3]) {
                 rotate(90, [0,1,0])
-                    cylinder(15.0, 5.5, 4.6);
+                    cylinder(15.0, 5.5, 4.9);
             }
         }
 
