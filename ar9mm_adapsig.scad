@@ -94,8 +94,8 @@ module body_upper ()
             cube([16, 5.0, 1.5+0.1]);
 
         // Feed ramp
-        translate([-18.0, 0, 7.5])
-            rotate(-50, [0,1,0])
+        translate([-18.0, 0, 8.5])
+            rotate(-60, [0,1,0])
                 cylinder(7, 6.0, 5.5);
     }
 }
@@ -169,7 +169,7 @@ module main_cavity (total_h) {
     // The width of the magazine is 21.6 mm. However, given that material
     // bulges out when printed, we need a bit more.
     base_w = 22.7;
-    base_len = 34.0;
+    base_len = 34.3;
 
     roof_th = 28.0;
     roof_w = 11.6;
@@ -211,9 +211,9 @@ module main_cavity (total_h) {
                     // at the bottom and the feed ramp at the top.
                     cube([8.0, 19.0, 11]);
                     // The horizontal cylinder is for the follower when empty.
-                    translate([8.8, -0.1, 0])
+                    translate([9.3, -0.1, -0.7])
                         rotate(-90, [1, 0, 0])
-                           cylinder(19.2, 8.0, 8.0, $fn=36);
+                           cylinder(19.2, 8.3, 8.3, $fn=36);
                 }
             }
         }
@@ -259,31 +259,31 @@ module latch_big_cut () {
 
             // A tall and narrow cut for the spring.
             translate([-20.0, (width1/2)*-1, -70.5])
-                rotate(-2.0, [0,1,0])
+                rotate(-5.0, [0,1,0])
                     cube([10, width1, 36.0]);
 
             // The main body, shaped as inverted "L".
-            translate([-32.0, 0, -79.8]) {
-                rotate(-3.0, [0,1,0])
+            translate([-29.4, 0, -81.0]) {
+                rotate(-8.0, [0,1,0])
                     union () {
                         translate([0, (width2/2)*-1, 0])
-                            cube([15.7, width2, 44]);
+                            cube([16.8, width2, 44]);
                         translate([9.0, (width3/2)*-1, 36.5])
-                            cube([12.8, width3, 7.5]);
+                            cube([13.5, width3, 7.5]);
                     }
             }
 
             // Removal of the support material above the latch bridge.
-            translate([-16.8, 0, -32.2])
+            translate([-16.9, 0, -32.9])
                 rotate(40, [0,1,0])
                     cube([9.0, width3, 16], center=true);
         }
 
         // Removal of the support material above the button.
-        translate([-28.1, 10.2, -36.2])
+        translate([-28.1, 10.2, -37.2])
             rotate(40, [1,0,0])
                 cube([5.3, 15, 15], center=true);
-        translate([-28.1, -10.2, -36.2])
+        translate([-28.1, -10.2, -37.2])
             rotate(-40, [1,0,0])
                 cube([5.3, 15, 15], center=true);
     }
@@ -307,9 +307,9 @@ module latch_see_saw_bridge () {
                 cube([4.5, 22.1, height], center=true);
 
             translate([0, -9.7, 0])
-                cube([6.0, 2.7, height], center=true);
+                cube([5.5, 2.7, height], center=true);
             translate([0, 9.7, 0])
-                cube([6.0, 2.7, height], center=true);
+                cube([5.5, 2.7, height], center=true);
 
             translate([-1.0, 8.7, 0])
                 rotate(-45, [0,0,1])
@@ -334,8 +334,8 @@ module latch_see_saw_button () {
 
 module latch_see_saw_spring () {
     width = 7.0;
-    translate([-17.0, (width/2)*-1, -73.0]) {
-        rotate(-8.0, [0,1,0]) {
+    translate([-13.5, (width/2)*-1, -73.0]) {
+        rotate(-12.0, [0,1,0]) {
             cube([3.0, width, 36.0]);
             translate([3.0/2, -3+width/2, 33])
                 rotate(40, [1,0,0])
@@ -368,8 +368,8 @@ module latch_see_saw_stop () {
 
 module latch_see_saw () {
     union () {
-        translate([-21.6, 0, -54.9])
-            rotate(92.0, [0,1,0])
+        translate([-20.4, 0, -55.3])
+            rotate(88.0, [0,1,0])
         {
             union () {
                 translate([0, -5.7, 0])
@@ -378,12 +378,12 @@ module latch_see_saw () {
                     latch_see_saw_side();
             }
         }
-        translate([-17.5, 0, -37.7])
-            rotate(-7.0, [0,1,0])
+        translate([-16.9, 0, -37.7])
+            rotate(-12.0, [0,1,0])
                 latch_see_saw_bridge();
-        translate([-25.5, 0, -74.0])
+        translate([-21.8, 0, -74.0])
             latch_see_saw_button();
-        translate([-30.2, 0, -69.0])
+        translate([-26.3, 0, -69.0])
             latch_see_saw_stop();
 
         latch_see_saw_spring();
@@ -397,15 +397,11 @@ module adapter_base () {
             body_upper();
         }
 
-        translate([8.0, 0, -77.0])
-            rotate(5, [0,1,0])
-                main_cavity(83.7);
+        translate([7.9, 0, -77.0])
+            rotate(5.5, [0,1,0])
+!               main_cavity(83.7);
 
         latch_big_cut();
-
-        // Inspection cut XXX
-        translate([-24.0, -21, -63.0])
-            cube([9, 14, 10]);
 
         // Text banners
         translate([-27.0, -13.0, -72.0])
