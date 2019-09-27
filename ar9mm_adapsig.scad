@@ -399,7 +399,7 @@ module adapter_base () {
 
         translate([7.9, 0, -77.0])
             rotate(5.5, [0,1,0])
-!               main_cavity(83.7);
+                main_cavity(83.7);
 
         latch_big_cut();
 

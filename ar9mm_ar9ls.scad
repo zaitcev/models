@@ -64,7 +64,7 @@ module ejector_support () {
 module ejector () {
     // The ejector raises up from the top of the body by 6.6 mm,
     // or 14.6 mm from the zero plane.
-    translate([-2.0, -5.7, 4.6]) {
+    translate([-2.0, -5.7, 4.8]) {
         union () {
             ejector_usual();
             ejector_support();
