@@ -90,12 +90,19 @@ module body_upper ()
         translate([14*-1, -6.0/2, 8.1-2.5])
             cube([upp_length-15, 6.0, 2.5+0.1]);
 
-        translate([((well_length/2 - upp_len_off) + 0.1)*-1, -5.0/2, 8.1-1.5])
-            cube([16, 5.0, 1.5+0.1]);
+        translate([((well_length/2 - upp_len_off) + 0.1)*-1, -5.4/2, 8.1-1.8])
+            cube([16, 5.4, 1.8+0.1]);
+
+        // Without this cut, bolt touches the rear of the top part just
+        // slightly. This does not seem to hurt anything, but let's be safe.
+
+        translate([33.5, 0, 7.5])
+            rotate(-35, [0,1,0])
+                cube([10, well_width, 10], center=true);
 
         // Feed ramp
-        translate([-18.0, 0, 8.5])
-            rotate(-60, [0,1,0])
+        translate([-16.8, 0, 7.5])
+            rotate(-50, [0,1,0])
                 cylinder(7, 6.0, 5.5);
     }
 }
@@ -263,29 +270,29 @@ module latch_big_cut () {
                     cube([10, width1, 36.0]);
 
             // The main body, shaped as inverted "L".
-            translate([-29.4, 0, -81.0]) {
-                rotate(-8.0, [0,1,0])
+            translate([-32.6, 0, -78.9]) {
+                rotate(-5.0, [0,1,0])
                     union () {
                         translate([0, (width2/2)*-1, 0])
                             cube([16.8, width2, 44]);
                         translate([9.0, (width3/2)*-1, 36.5])
-                            cube([13.5, width3, 7.5]);
+                            cube([14.0, width3, 7.5]);
                     }
             }
 
             // Removal of the support material above the latch bridge.
-            translate([-16.9, 0, -32.9])
+            translate([-16.9, 0, -30.9])
                 rotate(40, [0,1,0])
                     cube([9.0, width3, 16], center=true);
         }
 
         // Removal of the support material above the button.
-        translate([-28.1, 10.2, -37.2])
+        translate([-28.1, 10.2, -35.2])
             rotate(40, [1,0,0])
-                cube([5.3, 15, 15], center=true);
-        translate([-28.1, -10.2, -37.2])
+                cube([5.1, 15, 15], center=true);
+        translate([-28.1, -10.2, -35.2])
             rotate(-40, [1,0,0])
-                cube([5.3, 15, 15], center=true);
+                cube([5.1, 15, 15], center=true);
     }
 }
 
@@ -334,8 +341,8 @@ module latch_see_saw_button () {
 
 module latch_see_saw_spring () {
     width = 7.0;
-    translate([-13.5, (width/2)*-1, -73.0]) {
-        rotate(-12.0, [0,1,0]) {
+    translate([-16.7, (width/2)*-1, -71.4]) {
+        rotate(-8.5, [0,1,0]) {
             cube([3.0, width, 36.0]);
             translate([3.0/2, -3+width/2, 33])
                 rotate(40, [1,0,0])
@@ -368,8 +375,8 @@ module latch_see_saw_stop () {
 
 module latch_see_saw () {
     union () {
-        translate([-20.4, 0, -55.3])
-            rotate(88.0, [0,1,0])
+        translate([-22.0, 0, -53.7])
+            rotate(90.0, [0,1,0])
         {
             union () {
                 translate([0, -5.7, 0])
@@ -378,12 +385,12 @@ module latch_see_saw () {
                     latch_see_saw_side();
             }
         }
-        translate([-16.9, 0, -37.7])
-            rotate(-12.0, [0,1,0])
+        translate([-18.0, 0, -36.1])
+            rotate(-9.0, [0,1,0])
                 latch_see_saw_bridge();
-        translate([-21.8, 0, -74.0])
+        translate([-24.0, 0, -74.0])
             latch_see_saw_button();
-        translate([-26.3, 0, -69.0])
+        translate([-29.0, 0, -69.0])
             latch_see_saw_stop();
 
         latch_see_saw_spring();
@@ -397,8 +404,8 @@ module adapter_base () {
             body_upper();
         }
 
-        translate([7.9, 0, -77.0])
-            rotate(5.5, [0,1,0])
+        translate([4.0, 0, -77.2])
+            rotate(10, [0,1,0])
                 main_cavity(83.7);
 
         latch_big_cut();
