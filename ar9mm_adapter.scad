@@ -90,8 +90,8 @@ module body_upper ()
         translate([14*-1, -6.0/2, 8.1-2.5])
             cube([upp_length-15, 6.0, 2.5+0.1]);
 
-        translate([((well_length/2 - upp_len_off) + 0.1)*-1, -5.0/2, 8.1-1.5])
-            cube([16, 5.0, 1.5+0.1]);
+        translate([((well_length/2 - upp_len_off) + 0.1)*-1, -5.4/2, 8.1-1.8])
+            cube([16, 5.4, 1.8+0.1]);
 
         // Feed ramp
         translate([-16.0, 0, 7.5])

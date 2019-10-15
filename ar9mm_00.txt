@@ -2,6 +2,8 @@ Material: ABS
 
 Options for Cura and Lulzbot Mini:
   Setup: Custom (default Recommended)
+    Shell
+      Wall Thickness:    2.0 mm  (default 1.0 mm)
     Adhesion
       Adhesion type:  Skirt    -- use Brim for AR9LQ
     Support
