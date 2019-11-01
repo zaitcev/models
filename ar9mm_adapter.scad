@@ -93,6 +93,13 @@ module body_upper ()
         translate([((well_length/2 - upp_len_off) + 0.1)*-1, -5.4/2, 8.1-1.8])
             cube([16, 5.4, 1.8+0.1]);
 
+        // Without this cut, bolt touches the rear of the top part just
+        // slightly. This does not seem to hurt anything, but let's be safe.
+
+        translate([33.5, 0, 7.5])
+            rotate(-35, [0,1,0])
+                cube([10, well_width, 10], center=true);
+
         // Feed ramp
         translate([-16.0, 0, 7.5])
             rotate(-50, [0,1,0])
