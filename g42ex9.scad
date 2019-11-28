@@ -8,7 +8,7 @@
 // in the front than in the back. So, it mostly serves as a comment.
 grip_w = 21.3;
 
-module outer_sleeve () {
+module outer_mold () {
     strap_h = 27.2;
     front_r = 5.0;
 
@@ -76,8 +76,9 @@ module main_cavity () {
 
     flange_h = 2.1; // actual 2.32, but material prints wider
     flange_w = 16.8;
-    flange_r = 4.6;
-    off_flange = flange_w/2 - flange_r;
+    flange_r = 4.0;
+    off_flange_2 = flange_w/2 - flange_r;
+    off_flange_1 = flange_w/2 - flange_r - 1.5;
 
     cav_d = 40;    // magazine depth (at horizontal) is 30.6
     cav_w = 17.6;  // remember that the nose is narrower, to be done later
@@ -86,6 +87,7 @@ module main_cavity () {
     off_cav_2 = cav_w/2 - cav_r;
     off_cav_1 = cav_w/2 - cav_r - 1.5;  // nose is significantly narrower
 
+    // Layer 1 (from the bottom of the magazine body): the rail
     translate([0, 0, 0]) {
         hull () {
             translate([-0.5, off_rail, rail_h/2])
@@ -97,17 +99,28 @@ module main_cavity () {
         }
     }
 
+    // Layer 2: the flange
     translate([0, 0, rail_h - 0.1]) {
         hull () {
-            translate([-0.5, off_flange, flange_h/2])
+            $fn = 24;
+
+            translate([-1.1, off_flange_1, flange_h/2])
                 cylinder(flange_h, flange_r, flange_r, center=true);
-            translate([-0.5, off_flange*-1, flange_h/2])
+            translate([-1.1, off_flange_1*-1, flange_h/2])
                 cylinder(flange_h, flange_r, flange_r, center=true);
+
+            // middle
+            translate([6.0, off_flange_2, flange_h/2])
+                cylinder(flange_h, flange_r, flange_r, center=true);
+            translate([6.0, off_flange_2*-1, flange_h/2])
+                cylinder(flange_h, flange_r, flange_r, center=true);
+
             translate([26.0, 0, flange_h/2])
                 cube([3, flange_w, flange_h], center=true);
         }
     }
 
+    // Layer 3: the main body of the cavity
     translate([-1.6, 0, rail_h + flange_h - 0.2]) {
 
         multmatrix(m = [[   1,   0,  -0.215, 0],
@@ -124,6 +137,7 @@ module main_cavity () {
                     cylinder(cav_h, cav_r, cav_r, center=true);
 
                 // middle
+                // The bend here is not cav_r, but whatever, this works.
                 translate([7.0, off_cav_2, cav_h/2])
                     cylinder(cav_h, cav_r, cav_r, center=true);
                 translate([7.0, off_cav_2*-1, cav_h/2])
@@ -136,14 +150,19 @@ module main_cavity () {
         }
     }
 
-    
+    // Finally, tabs that cross layers 1 and 2
+    translate([8.0, 0, 0]) {
+        tab_h = rail_h + flange_h - 0.1;
+        translate([0, 0, tab_h/2])
+            cube([5.0, rail_w, tab_h], center=true);
+    }
 }
 
-module outer_mold () {
+module design () {
 
     difference () {
 
-        outer_sleeve();
+        outer_mold();
 
         // 2.5 is the thickness of the bottom of the factory plate
         translate([0, 0, 2.5])
@@ -155,4 +174,5 @@ module outer_mold () {
     }
 }
 
-outer_mold();
+rotate(-80, [0,1,0])
+    design();
