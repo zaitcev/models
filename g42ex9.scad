@@ -9,8 +9,9 @@
 grip_w = 21.3;
 
 module outer_mold () {
+
     strap_h = 27.2;
-    front_r = 5.0;
+    front_r = 7.0;
 
     rear_r = 2.0;
 
@@ -25,32 +26,38 @@ module outer_mold () {
     off_b1 = base_w / 2 - fr_base_r;
 
     // The main, taller part of the wrapping grip
-    hull () {
+    difference () {
+        hull () {
 
-        // This multmatrix is for the front strap.
-        multmatrix(m = [[   1,   0,  -0.27,  0],
-                        [   0,   1,   0,     0],
-                        [   0,   0,   1,     0],
-                        [   0,   0,   0,     1]])
-        {
+            // This multmatrix is for the front strap.
+            multmatrix(m = [[   1,   0,  -0.27,  0],
+                            [   0,   1,   0,     0],
+                            [   0,   0,   1,     0],
+                            [   0,   0,   0,     1]])
+            {
 
-            translate([0, off1, strap_h/2])
-                cylinder(strap_h, front_r, front_r, center=true);
-            translate([0, off1*-1, strap_h/2])
-                cylinder(strap_h, front_r, front_r, center=true);
+                translate([2.0, off1, strap_h/2])
+                    cylinder(strap_h, front_r, front_r, center=true);
+                translate([2.0, off1*-1, strap_h/2])
+                    cylinder(strap_h, front_r, front_r, center=true);
+            }
+
+            // The tilt of the rear cut differs and matches the magazine.
+            multmatrix(m = [[   1,   0,  -0.210, 0],
+                            [   0,   1,   0,     0],
+                            [   0,   0,   1,     0],
+                            [   0,   0,   0,     1]])
+            {
+                translate([25.0, off2, strap_h/2])
+                    cylinder(strap_h, rear_r, rear_r, center=true);
+                translate([25.0, off2*-1, strap_h/2])
+                    cylinder(strap_h, rear_r, rear_r, center=true);
+            }
         }
 
-        // The tilt of the rear cut differs and matches the magazine.
-        multmatrix(m = [[   1,   0,  -0.215, 0],
-                        [   0,   1,   0,     0],
-                        [   0,   0,   1,     0],
-                        [   0,   0,   0,     1]])
-        {
-            translate([25.0, off2, strap_h/2])
-                cylinder(strap_h, rear_r, rear_r, center=true);
-            translate([25.0, off2*-1, strap_h/2])
-                cylinder(strap_h, rear_r, rear_r, center=true);
-        }
+        translate([26.6, 0, -1.3])
+            rotate(55, [0,1,0])
+                cube([5, 30, 5], center=true);
     }
 
     // The base that adds rigidity and serves as a handle at the bottom
@@ -83,7 +90,7 @@ module main_cavity () {
     cav_d = 40;    // magazine depth (at horizontal) is 30.6
     cav_w = 17.6;  // remember that the nose is narrower, to be done later
     cav_h = 28;    // bigger than strap_h
-    cav_r = 4.0;
+    cav_r = 4.4;
     off_cav_2 = cav_w/2 - cav_r;
     off_cav_1 = cav_w/2 - cav_r - 1.5;  // nose is significantly narrower
 
@@ -123,7 +130,7 @@ module main_cavity () {
     // Layer 3: the main body of the cavity
     translate([-1.6, 0, rail_h + flange_h - 0.2]) {
 
-        multmatrix(m = [[   1,   0,  -0.215, 0],
+        multmatrix(m = [[   1,   0,  -0.210, 0],
                         [   0,   1,   0,     0],
                         [   0,   0,   1,     0],
                         [   0,   0,   0,     1]])
@@ -131,9 +138,9 @@ module main_cavity () {
             hull () {
 
                 // front
-                translate([0, off_cav_1, cav_h/2])
+                translate([0.4, off_cav_1, cav_h/2])
                     cylinder(cav_h, cav_r, cav_r, center=true);
-                translate([0, off_cav_1*-1, cav_h/2])
+                translate([0.4, off_cav_1*-1, cav_h/2])
                     cylinder(cav_h, cav_r, cav_r, center=true);
 
                 // middle
@@ -151,7 +158,7 @@ module main_cavity () {
     }
 
     // Finally, tabs that cross layers 1 and 2
-    translate([8.0, 0, 0]) {
+    translate([8.4, 0, 0]) {
         tab_h = rail_h + flange_h - 0.1;
         translate([0, 0, tab_h/2])
             cube([5.0, rail_w, tab_h], center=true);
@@ -168,11 +175,11 @@ module design () {
         translate([0, 0, 2.5])
             main_cavity();
 
-        // XXX Inspection cut
-        translate([-9, -13, -0.1])
-            cube([10, 10, 10]);
+        // Lock hole for the inside bottom plate
+        translate([3.2, 0, -0.1])
+            cylinder(2.7, 2.4, 2.4, $fn=20);
     }
 }
 
-rotate(-80, [0,1,0])
+rotate(-90, [0,1,0])
     design();
