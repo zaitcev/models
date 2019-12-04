@@ -11,13 +11,13 @@ grip_w = 21.3;
 module outer_mold () {
 
     strap_h = 27.2;
-    front_r = 7.0;
+    front_r = 9.0;
 
     rear_r = 2.0;
 
     base_mr = 3.0;
     base_h = 7.0 - base_mr * 2;
-    fr_base_r = 5.0;
+    fr_base_r = 7.0;
     base_w = grip_w - base_mr * 2 + 4.0;
 
     off1 = grip_w / 2 - front_r;
@@ -36,9 +36,9 @@ module outer_mold () {
                             [   0,   0,   0,     1]])
             {
 
-                translate([2.0, off1, strap_h/2])
+                translate([3.4, off1, strap_h/2])
                     cylinder(strap_h, front_r, front_r, center=true);
-                translate([2.0, off1*-1, strap_h/2])
+                translate([3.4, off1*-1, strap_h/2])
                     cylinder(strap_h, front_r, front_r, center=true);
             }
 
@@ -55,6 +55,7 @@ module outer_mold () {
             }
         }
 
+        // A mostly cosmetic cut at the rear bottom
         translate([26.6, 0, -1.3])
             rotate(55, [0,1,0])
                 cube([5, 30, 5], center=true);
@@ -63,9 +64,9 @@ module outer_mold () {
     // The base that adds rigidity and serves as a handle at the bottom
     minkowski () {
         hull () {
-            translate([-0.5, off_b1, base_h/2 + base_mr])
+            translate([0.5, off_b1, base_h/2 + base_mr])
                 cylinder(base_h, fr_base_r, fr_base_r, center=true);
-            translate([-0.5, off_b1*-1, base_h/2 + base_mr])
+            translate([0.5, off_b1*-1, base_h/2 + base_mr])
                 cylinder(base_h, fr_base_r, fr_base_r, center=true);
             translate([23.0, 0, base_h/2 + base_mr])
                 cube([3, base_w, base_h], center=true);
@@ -176,7 +177,7 @@ module design () {
             main_cavity();
 
         // Lock hole for the inside bottom plate
-        translate([3.2, 0, -0.1])
+        translate([4.8, 0, -0.1])
             cylinder(2.7, 2.4, 2.4, $fn=20);
     }
 }
