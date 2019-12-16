@@ -182,5 +182,5 @@ module design () {
     }
 }
 
-rotate(-90, [0,1,0])
+rotate(90, [0,1,0])
     design();
