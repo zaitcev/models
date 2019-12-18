@@ -98,9 +98,9 @@ module main_cavity () {
     // Layer 1 (from the bottom of the magazine body): the rail
     translate([0, 0, 0]) {
         hull () {
-            translate([-0.5, off_rail, rail_h/2])
+            translate([-0.8, off_rail, rail_h/2])
                 cylinder(rail_h, rail_r, rail_r, center=true);
-            translate([-0.5, off_rail*-1, rail_h/2])
+            translate([-0.8, off_rail*-1, rail_h/2])
                 cylinder(rail_h, rail_r, rail_r, center=true);
             translate([26.0, 0, rail_h/2])
                 cube([3, rail_w, rail_h], center=true);
@@ -178,9 +178,11 @@ module design () {
 
         // Lock hole for the inside bottom plate
         translate([4.8, 0, -0.1])
-            cylinder(2.7, 2.4, 2.4, $fn=20);
+            cylinder(2.7, 2.5, 2.5, $fn=20);
     }
 }
 
+// Rotate for printing because we want quality outside surface.
+// This fills the interior with a support, but we accept it.
 rotate(90, [0,1,0])
     design();
