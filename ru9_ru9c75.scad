@@ -5,13 +5,54 @@
 
 // use <ru9_adapter.scad>;
 
-// Lower Outer Mold
-module lom() {
+// LOM C0: the lower cube zero
+lom_c0_len = 48.0;
+lom_c0_w = 29.2;
+lom_c0_h = 37.0;
 
-    // LOM C0: the lower cube zero
-    lom_c0_len = 48.0;
-    lom_c0_w = 29.2;
-    lom_c0_h = 37.0;
+// Top C1: the top base cube 1, under "ribs"
+top_c1_len = 62.0;
+top_c1_w = 34.4;
+top_c1_h = 3.2;
+// "Rib"
+top_c1r_len = 4.0;
+top_c1r_w = top_c1_w;
+top_c1r_h = 5.7-top_c1_h;
+// Top C2: the center box
+top_c2_len = top_c1_len;
+top_c2_w = 28.6;
+top_c2_h = 16.2;
+
+// The top part of the adapter, above the zero plane
+module top() {
+    translate([lom_c0_len - top_c1_len, 0, 0]) {
+        difference () {
+            union () {
+                // Main plate
+                translate([0, (top_c1_w/2)*-1, 0])
+                    cube([top_c1_len, top_c1_w, top_c1_h]);
+                // "Ribs"
+                effective_length = top_c1_len - top_c1r_len;
+                for (pitch_base = [0 : effective_length/4 : top_c1_len]) {
+                    translate([pitch_base, (top_c1r_w/2)*-1, top_c1_h])
+                        cube([top_c1r_len, top_c1r_w, top_c1r_h]);
+                }
+                // Center box
+                translate([0, (top_c2_w/2)*-1, 0])
+                    cube([top_c2_len, top_c2_w, top_c2_h]);
+            }
+
+            // Cut for the bolt stop lever, a little wider at the front
+            translate([-0.1, (top_c2_w/2 + 0.2)*-1, 10.8])
+                cube([41.0, 5.0, 5.5]);
+            translate([23.5, (top_c2_w/2 + 0.2)*-1, 10.8])
+                cube([27.0, 3.0, 5.5]);
+        }
+    }
+}
+
+// Lower Outer Mold, below the zero plane
+module lom() {
 
     difference () {
         union () {
@@ -41,7 +82,7 @@ module lom() {
             // A litte slope in front, magazine intrudes into it.
             translate([0, 0, -18.0]) {
                 rotate(-17.0, [0,1,0]) {
-                    lom_slope_h = 20.0;
+                    lom_slope_h = 19.1;
                     difference () {
                         translate([0, (lom_c0_w/2)*-1, 0])
                             cube([6.6, lom_c0_w, lom_slope_h]);
@@ -80,8 +121,34 @@ module lom() {
     }
 }
 
+// The magazine cavity on Ruger does not include the top, narrowing part.
+// So, we use a simple straight hole, a rotate, and no multmatrix.
+module mag_cz75 () {
+    m_len = 32.5;
+    m_w = 21.0;
+    m_fr_r = 6.5;
+    m_h = 68;  // slanted length, just great enough to pierce the whole design
+
+    hull () {
+        translate([m_fr_r, (m_w/2 - m_fr_r), 0])
+            cylinder(m_h, m_fr_r, m_fr_r);
+        translate([m_fr_r, (m_w/2 - m_fr_r)*-1, 0])
+            cylinder(m_h, m_fr_r, m_fr_r);
+        translate([m_len - 5.0, (m_w/2)*-1, 0])
+            cube([5.0, m_w, m_h]);
+    }
+}
+
 module adapter () {
-    lom();
+    difference () {
+        union () {
+            top();
+            lom();
+        }
+        translate([11.0, 0, -48.0])
+            rotate(-19.0, [0,1,0])
+                mag_cz75();
+    }
 }
 
 module main () {
