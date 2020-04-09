@@ -40,16 +40,31 @@ module top() {
                 // Center box
                 translate([0, (top_c2_w/2)*-1, 0])
                     cube([top_c2_len, top_c2_w, top_c2_h]);
+                // Rest for the bolt stop transfer bar
+                translate([0, -8.7, top_c2_h-0.1])
+                    cube([3.0, 3.0, 3.5]);
             }
 
             // Cut for the bolt stop lever, accounts for its S-shape
+            // This also truncates the rest for the bolt stop transfer bar.
             translate([-2.5, (top_c2_w/2 - 2.5)*-1, 10.8])
                 rotate(-20.0, [0,0,1])
-                    cube([20.0, 5.0, 5.5]);
+                    cube([20.0, 5.0, 9.0]);
+            translate([4.0, (top_c2_w/2 + 0.2)*-1, 10.8])
+                cube([6.0, 8.6 + 0.2, 5.5]);
             translate([-0.1, (top_c2_w/2 + 0.2)*-1, 10.8])
-                cube([42.0, 5.0, 5.5]);
+                cube([39.0, 5.0, 5.5]);
             translate([23.5, (top_c2_w/2 + 0.2)*-1, 10.8])
                 cube([27.0, 3.0, 5.5]);
+
+            // Cut for bolt stop transfer bar
+            translate([6.3, -12.6, -0.4])
+                rotate(-12.0, [0,1,0])
+                    union () {
+                        translate([0, 0, 3.0])
+                            cube([1.8, 7.0, 18.0]);
+                        cube([1.8, 4.0, 18.0]);
+                    }
         }
     }
 }
@@ -134,17 +149,21 @@ module lom() {
         // A cut for our latch
         translate([10.0, 8.6, -40.0])
             rotate(-19.0, [0,1,0])
-                cube([8.0, 6.1, 30.0]);
+                union () {
+                    cube([8.0, 6.1, 30.0]);
+                    translate([-4.0, 0, 22.0])
+                        cube([5.0, 6.1, 8.0]);
+                }
     }
 }
 
 // The magazine cavity on Ruger does not include the top, narrowing part.
 // So, we use a simple straight hole, a rotate, and no multmatrix.
 module mag_cz75 () {
-    m_len = 33.0;
+    m_len = 32.6;
     m_w = 21.0;
-    m_fr_r = 6.0;
-    m_h = 70;  // slanted length, just great enough to pierce the whole design
+    m_fr_r = 5.5;
+    m_h = 72;  // slanted length, just great enough to pierce the whole design
 
     hull () {
         translate([m_fr_r, (m_w/2 - m_fr_r), 0])
@@ -162,12 +181,26 @@ module latch () {
         translate([-3.0, 12.4, -43.0])
             cube([6.8, 2.0, 28.3]);
         // lock nub
-        translate([-1.0, 10.8, -17.0])
-            cube([4.5, 2.2, 3.1]);
+        translate([-1.0, 10.0, -18.8])
+            cube([4.5, 3.0, 3.1]);
         // press plate
-        translate([-3.0, 10.8, -16.6])
-            cube([4.0, 2.0, 5.0]);
+        translate([-5.0, 11.0, -18.6])
+            cube([4.0, 2.0, 7.0]);
     }
+}
+
+module ejector () {
+    translate([23.4, -7.0, 29.0])
+        rotate(71, [0,1,0]) {
+            hull() {
+                rotate(-90, [1,0,0])
+                    cylinder(4.0, 4.0/2, 4.0/2, $fn=12);
+                translate([14.0, -2.0, (4.0/2)*-1])
+                    cube([1.0, 6.0, 4.0]);
+            }
+        }
+    translate([16.0, -7.0, 28.0])
+        cube([7.0, 4.0, 3.0]);
 }
 
 module adapter () {
@@ -177,10 +210,11 @@ module adapter () {
             lom();
             latch();
         }
-        translate([15.3, 0, -51.0])
+        translate([13.7, 0, -51.0])
             rotate(-19.0, [0,1,0])
                 mag_cz75();
     }
+    ejector();
 }
 
 module main () {
