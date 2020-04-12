@@ -42,7 +42,7 @@ module top() {
                     cube([top_c2_len, top_c2_w, top_c2_h]);
                 // Rest for the bolt stop transfer bar
                 translate([0, -8.7, top_c2_h-0.1])
-                    cube([3.0, 3.0, 3.5]);
+                    cube([3.2, 3.0, 3.5]);
             }
 
             // Cut for the bolt stop lever, accounts for its S-shape
@@ -50,7 +50,7 @@ module top() {
             translate([-2.5, (top_c2_w/2 - 2.5)*-1, 10.8])
                 rotate(-20.0, [0,0,1])
                     cube([20.0, 5.0, 9.0]);
-            translate([4.0, (top_c2_w/2 + 0.2)*-1, 10.8])
+            translate([4.4, (top_c2_w/2 + 0.2)*-1, 10.8])
                 cube([6.0, 8.6 + 0.2, 5.5]);
             translate([-0.1, (top_c2_w/2 + 0.2)*-1, 10.8])
                 cube([39.0, 5.0, 5.5]);
@@ -58,13 +58,14 @@ module top() {
                 cube([27.0, 3.0, 5.5]);
 
             // Cut for bolt stop transfer bar
-            translate([6.3, -12.6, -0.4])
+            translate([6.7, -12.6, -0.4]) {
                 rotate(-12.0, [0,1,0])
                     union () {
                         translate([0, 0, 3.0])
                             cube([1.8, 7.0, 18.0]);
                         cube([1.8, 4.0, 18.0]);
                     }
+            }
         }
     }
 }
@@ -189,18 +190,32 @@ module latch () {
     }
 }
 
-module ejector () {
-    translate([23.4, -7.0, 29.0])
-        rotate(71, [0,1,0]) {
-            hull() {
-                rotate(-90, [1,0,0])
-                    cylinder(4.0, 4.0/2, 4.0/2, $fn=12);
-                translate([14.0, -2.0, (4.0/2)*-1])
-                    cube([1.0, 6.0, 4.0]);
+
+// The root of the ejector is 1.38 thick, 7.5 wide.
+module ejector_cavity () {
+
+    depth = 30.0;  // excessive on purpose - should be called "cut_length"?
+
+    union () {
+
+        translate([29.5, -3.8, 19.5]) {
+
+            rotate(60.0, [0, 1, 0]) {
+
+                // The main pocket is a pocket at 60 degrees, documented
+                // in ar9mm_02_ejector.xcf. We center the cube so that it
+                // rotates in a predictable way.
+                translate([(depth/2)*-1, (1.7/2)*-1, (7.9/2)*-1])
+                    cube([depth, 1.7, 7.9]);
+
+                // We also add an inspection hole.
+                translate([depth/2, 0, 0])
+                    rotate(90, [1, 0, 0])
+                        cylinder(20, 3, 3);
             }
         }
-    translate([16.0, -7.0, 28.0])
-        cube([7.0, 4.0, 3.0]);
+
+    }
 }
 
 module adapter () {
@@ -213,8 +228,8 @@ module adapter () {
         translate([13.7, 0, -51.0])
             rotate(-19.0, [0,1,0])
                 mag_cz75();
+        ejector_cavity();
     }
-    ejector();
 }
 
 module main () {
