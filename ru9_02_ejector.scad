@@ -10,36 +10,20 @@
 // 
 thickness = 1.34;
 
-module nose () {
-    translate([3.0, 12.0, 0]) {
-        rotate(60, [0,0,1]) {
-            // Rotating around the zero corner helps to translate it around
-            // precisely later, so move it where we want to rotate.
-            translate([-2.5, 0, 0]) {
-                cube([2.5, 9.0, thickness]);
-            }
-        }
-    }
-}
-
-module stem () {
-    translate([0, -3.0, 0])
-        cube([3.0, 15.0, thickness]);
-}
-
-module root () {
-    hull () {
-        translate([0.0, -1.0, 0])
-        cube([1.0, 1.0, thickness]);
-        translate([0.0, (11.5+5.0)*-1, 0])
-            cube([8.0, 11.5, thickness]);
-    }
-}
-
 module main () {
-    root();
-    stem();
-    nose();
+    linear_extrude(height=thickness) {
+        // The angle of the tip is 60 degrees. We approximate in Carthesian.
+        polygon([
+            [ 3.0,  12.0],
+            [ 3.0,  -1.2],
+            [ 8.0,  -5.0],
+            [ 8.0, -16.5],
+            [ 0.0, -16.5],
+            [ 0.0,  11.0],
+            [-5.66, 15.00],
+            [-4.80, 16.50]]
+        );
+    }
 }
 
 main();
