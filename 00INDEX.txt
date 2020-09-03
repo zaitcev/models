@@ -1,3 +1,7 @@
+airspy_tower.jpg         A support structure for AirSpy
+airspy_tower.scad        This accessory allows for a better cooling and
+airspy_tower.stl         a paperclip antenna. See picture for reference.
+
 asus_ux303_key1.scad     The key cap for ASUS UX303. This design is impossible
                          to print on common desktop printers.
 
