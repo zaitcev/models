@@ -19,8 +19,7 @@ screw_dia = 4.3;
 
 // Cone is 50% wider than the hole
 module hole(dia, height) {
-    $fa = 8; // for some reason this does not work
-    $fs = 0.6;
+    $fn = 12;
     union () {
         cylinder(height, dia/2, dia/2);
         translate ([0,0, height-(dia/4)]) {
