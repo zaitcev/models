@@ -20,6 +20,8 @@ forlife_cover_1.scad     A lid for ForLife Lucidity brew cup, replacement
 forlife_cover_1.stl
 forlife_cover_2.scad     A lid for ForLife Lucidity brew cup, with a handle
 forlife_cover_2.stl
+forlife_cover_3.scad     A lid for ForLife Lucidity brew cup, with a crown
+forlife_cover_3.stl      This design provides a space to store a tea bag.
 
 g42k.scad                Common parts of G42K extensions for Glock 42
 g42k-base.scad           (for debugging)
