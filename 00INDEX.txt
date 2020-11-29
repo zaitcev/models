@@ -31,6 +31,9 @@ g42k-sport.scad          Longer sport version of G42K
 krydex_spacer_1.scad     A spacer for Glock 42 magazines in Krydex Gear poach
 krydex_spacer_1.stl      https://www.amazon.com/dp/B07L3DNPX3/
 
+kuhn_rikon_insert.scad   Replacement part for Kurn-Rikon pressure cooker
+kuhn_rikon_insert.stl    Use "brim" adhesion.
+
 mooney_anun_1.scad       A bezel for a single anunciator light in Mooney M20E
 mooney_anun_1.stl
 
