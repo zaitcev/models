@@ -1,9 +1,9 @@
 //
 // kr_defl_insert.scad
-// The insert for a deflector for a Kuhn-Rikon pressure cooker
+// The core insert for a deflector for a Kuhn-Rikon pressure cooker
 //
-// Even the original factory parts had a limited lifetime, but the
-// replacements of 2018 and later break after a very short time.
+// Even the original factory parts had a lifetime about 10 years, but
+// the replacements of 2018 and later break after a very short time.
 // This print isn't going to be amazingly durable either,  but at
 // least it's not $18+shipping+tax. And it may actually be better
 // than the garbage-level official replacements.
@@ -12,23 +12,30 @@
 // it is paramount to use a heat-resistant material. ABS is the
 // very minimum that you might want to use.
 //
+// Printing with a brim is recommended.
+//
+// The originals have a decorative ring on top. We made studs taller
+// than necessary, in order to ease with attachment without that ring.
+// They can be truncated easily.
+//
 
 $fn = 56;
 
-main_height = 14.0;
+main_height = 17.0;
 inside_dia = 25.0;   // Diameter of the main hole in the center
 flange_dia = 34.0;   // Diameter of the base that faces the deflector
 petal_width = 9.6;
 
 module outer_mold () {
+
     // The main cylinder, which forms the petals.
-    cylinder(main_height, (inside_dia + 3)/2, (inside_dia + 5)/2);
+    cylinder(main_height, (inside_dia + 3)/2, (inside_dia + 6.0)/2);
 
     // Base of the flange
-    translate([0, 0, 12.0])
+    translate([0, 0, main_height - 2.0])
        cylinder(2.0, flange_dia/2, flange_dia/2);
     // Slope of the flange
-    translate([0, 0, 7.0])
+    translate([0, 0, main_height - 7.0])
        cylinder(5.0, (inside_dia + 3)/2, flange_dia/2);
 
     // Attachment studs
@@ -38,7 +45,7 @@ module outer_mold () {
     for (phi = [0 : 45 : 360]) {
         rotate(phi, [0,0,1])
             translate([inside_dia/2 + 2.2, 0, main_height])
-                cylinder(1.0, 1.4, 1.4, $fn=12);
+                cylinder(1.6, 1.4, 1.4, $fn=12);
     }
 }
 
@@ -53,12 +60,12 @@ module petal_cut () {
             // We have 2 cut cubes that make sides of petal parallel.
 
             cut_cube_y = 10;
-            cut_cube_z = 8;
+            cut_cube_z = main_height - 5.2;
 
             translate([0, petal_width/2, -0.1])
-                cube([14, cut_cube_y, cut_cube_z + 0.1]);
+                cube([15, cut_cube_y, cut_cube_z + 0.1]);
             translate([0, (cut_cube_y + petal_width/2)*-1, -0.1])
-                cube([14, cut_cube_y, cut_cube_z + 0.1]);
+                cube([15, cut_cube_y, cut_cube_z + 0.1]);
         }
     }
 }
@@ -67,14 +74,16 @@ module petal_cut () {
 // to form the ridges that get into a groove on the body of the valve.
 module center_hole () {
 
-    translate([0, 0, 2.5-0.1])
-        cylinder(main_height+0.2-2.5, inside_dia/2, inside_dia/2);
+    intf_h = 3.3;
 
+    translate([0, 0, intf_h-0.1])
+        cylinder(main_height+0.2-intf_h, inside_dia/2, inside_dia/2);
+
+    // The hourglass shape creates the circular ridge.
     translate([0, 0, 0])
-        cylinder(2.5, (inside_dia-4.0)/2, inside_dia/2);
-
+        cylinder(intf_h, (inside_dia-6.0)/2, inside_dia/2);
     translate([0, 0, -0.1])
-        cylinder(2.5+0.1, (inside_dia+1.2)/2, (inside_dia-2.0)/2);
+        cylinder(intf_h+0.1, (inside_dia+1.2)/2, (inside_dia-4.0)/2);
 }
 
 module the_insert () {
