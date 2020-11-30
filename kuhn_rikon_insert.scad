@@ -21,15 +21,15 @@
 
 $fn = 56;
 
-main_height = 17.0;
-inside_dia = 25.0;   // Diameter of the main hole in the center
+main_height = 16.0;
+inside_dia = 25.4;   // Diameter of the main hole in the center
 flange_dia = 34.0;   // Diameter of the base that faces the deflector
 petal_width = 9.6;
 
 module outer_mold () {
 
     // The main cylinder, which forms the petals.
-    cylinder(main_height, (inside_dia + 3)/2, (inside_dia + 6.0)/2);
+    cylinder(main_height, (inside_dia + 2.4)/2, (inside_dia + 6.0)/2);
 
     // Base of the flange
     translate([0, 0, main_height - 2.0])
@@ -44,7 +44,7 @@ module outer_mold () {
     // and the pegs of the factory part seems to be the same.
     for (phi = [0 : 45 : 360]) {
         rotate(phi, [0,0,1])
-            translate([inside_dia/2 + 2.2, 0, main_height])
+            translate([inside_dia/2 + 2.0, 0, main_height])
                 cylinder(1.6, 1.4, 1.4, $fn=12);
     }
 }
@@ -60,7 +60,7 @@ module petal_cut () {
             // We have 2 cut cubes that make sides of petal parallel.
 
             cut_cube_y = 10;
-            cut_cube_z = main_height - 5.2;
+            cut_cube_z = main_height - 4.6;
 
             translate([0, petal_width/2, -0.1])
                 cube([15, cut_cube_y, cut_cube_z + 0.1]);
