@@ -46,4 +46,6 @@ ph_holder_bmw_x3.stl
 shoe_horn_hanger.scad    A hanger hook for a shoe horn
 shoe_horn_hanger.stl
 
+stampholder_picrail.scad A holder for a Tekton stamp over a Picatinny rail
+
 usb_cable_holder_m.scad  A desk-edge hook for USB cables
