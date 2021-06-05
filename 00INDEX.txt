@@ -48,4 +48,6 @@ shoe_horn_hanger.stl
 
 stampholder_picrail.scad A holder for a Tekton stamp over a Picatinny rail
 
+toto_base_tooth.scad     Tooth for base plate of Toto C200 washlet
+
 usb_cable_holder_m.scad  A desk-edge hook for USB cables
