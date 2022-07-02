@@ -1,5 +1,7 @@
 // A console support for a doorbell
 
+thickness = 1.5;
+
 // The slab takes 4 (X,Y,0) points and thickness.
 // Bottom layout is counter-clockwise:
 //    A   D
@@ -64,36 +66,37 @@ module slab(a, b, c, d, th) {
 // punch 4 holes in the slab for screws
 difference () {
   slab([ 12.0, 0.0, 0], [ 1.0, 140.0, 0],
-   [-1.0, 140.0, 0], [-12.0, 0.0, 0], 1.5);
+   [-1.0, 140.0, 0], [-12.0, 0.0, 0], thickness);
 
   translate([ 7.5, 4.5, -0.1])
-    cylinder(2, 2.0, 2.0);
+    cylinder(2, r=2.2, $fn=12);
   translate([-7.5, 4.5, -0.1])
-    cylinder(2, 2.0, 2.0);
+    cylinder(2, r=2.2, $fn=12);
 
   translate([ 6.0, 16.0, -0.1])
-    cylinder(2, 2.0, 2.0);
+    cylinder(2, r=2.2, $fn=12);
   translate([-6.0, 16.0, -0.1])
-    cylinder(2, 2.0, 2.0);
+    cylinder(2, r=2.2, $fn=12);
 }
 
+// The spine
 difference () {
-// XXX polyhedron does not work: it itself forms fine,
-// but applying any difference erases it completely.
-// So, we work around by using a tilted cube.
-//  spine([0, 0.0, 0.0], [0, 140.0, 0.0],
-//   [0, 140.0, 6.0],  [0, 2.0, 12.0], 2.0);
 
-  intersection () {
+  // Hull is wrapped around the base and posts.
+  hull () {
+    // Base
     translate([-1.5, 0, 0])
-      cube([3.0, 150, 20]);
-    rotate(-3.5, [1, 0, 0])
-      translate([-1.0, 0, 0])
-        cube([2.0, 140.0, 12.0]);
+      cube([3.0, 140, thickness]);
+    // Tall post at the root
+    translate([-1.5, 2, 0])
+      cube([3.0, 16, 20]);
+    // Short post at the tip
+    translate([-1.5, 138, 0])
+      cube([3.0, 1, 3]);
   }
 
   translate([0, 136.5, 3.7])
     rotate(90, [0, 1, 0])
-      translate([0, 0, -3.0/2])
-        cylinder(3, 1.8, 1.8);
+      translate([0, 0, -3.1/2])
+        cylinder(3.2, 1.8, 1.8, $fn=12);
 }
