@@ -1,5 +1,4 @@
 //
-// kr_defl_insert.scad
 // The core insert for a deflector for a Kuhn-Rikon pressure cooker
 //
 // Even the original factory parts had a lifetime about 10 years, but
