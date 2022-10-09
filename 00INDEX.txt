@@ -14,6 +14,10 @@ bleach_pen_holder.stl
 brwng_1911bl_fiber1.scad The fiber-optic front sight for Browning 1911-22 or
                          1911-380 Black Label (not "Pro").
 
+cnea_01_segment.scad     Chimnea Cover, a segment of the main cone
+cnea_02_ring.scad        Chimnea Cover, the center ring
+cnea_03_ball.scad        Chimnea Cover, the top ball
+
 cube1.stl           The default cube from Blender
 
 forlife_cover_1.scad     A lid for ForLife Lucidity brew cup, replacement
