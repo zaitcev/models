@@ -52,7 +52,19 @@ module teeth () {
                 //             tooth();
                 //     }
                 // }
-                tooth();
+                rotate(30, [0,0,1])
+                    tooth();
+        }
+    }
+}
+
+module holes () {
+    translate([0, 0, -0.1])
+        cylinder(base_th + 0.2, r=22.0);
+    for (angle = [0 : 60 : 300]) {
+        rotate(angle + 0, [0,0,1]) {
+            translate([50.0, 0, -0.1])
+                cylinder(base_th + 0.2, r=10.0);
         }
     }
 }
@@ -60,8 +72,7 @@ module teeth () {
 module main () {
     difference () {
         base();
-        translate([0, 0, -0.1])
-            cylinder(base_th + 0.2, r=12.0);
+        holes();
     }
     teeth();
 }
