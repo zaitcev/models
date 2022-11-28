@@ -3,20 +3,21 @@
 //
 // Even the original factory parts had a lifetime about 10 years, but
 // the replacements of 2018 and later break after a very short time.
-// This print isn't going to be amazingly durable either,  but at
-// least it's not $18+shipping+tax. And it may actually be better
-// than the garbage-level official replacements.
+// If printed properly, the part may serve for 10 years (it served
+// for 4 years at the time of this upload).
 //
 // Because a super-heated steam (> 100 C) exits the pressure cooker,
 // it is paramount to use a heat-resistant material. ABS is the
-// very minimum that you might want to use.
+// very minimum that you might want to use. Because there is no contact
+// with food, you can use any durable material. However, the locking
+// petals must deflect, so you cannot use a material that is too
+// stiff or brittle.
+//
+// The originals have a decorative ring on top, which we omitted.
+// We made studs taller than necessary, in order to ease the attachment
+// without that ring. They can be truncated easily.
 //
 // Printing with a brim is recommended.
-//
-// The originals have a decorative ring on top. We made studs taller
-// than necessary, in order to ease with attachment without that ring.
-// They can be truncated easily.
-//
 
 $fn = 56;
 
