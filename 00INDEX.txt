@@ -41,6 +41,8 @@ kuhn_rikon_insert.stl
 mooney_anun_1.scad       A bezel for a single anunciator light in Mooney M20E
 mooney_anun_1.stl
 
+npt_0125_adapter.scad	 An adapter for 1 1/4 inch male NPT thread
+
 outlet_base.scad         A base for a wall outlet adapter tap for 6 outlets
 outlet_base.stl          https://www.amazon.com/dp/B073DM1XRL/
 
