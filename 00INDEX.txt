@@ -27,10 +27,7 @@ forlife_cover_2.stl
 forlife_cover_3.scad     A lid for ForLife Lucidity brew cup, with a crown
 forlife_cover_3.stl      This design provides a space to store a tea bag.
 
-g42k.scad                Common parts of G42K extensions for Glock 42
-g42k-base.scad           (for debugging)
-g42k-short.scad          Short version of G42K
-g42k-sport.scad          Longer sport version of G42K
+g42ex9.scad              G42EX9
 
 krydex_spacer_1.scad     A spacer for Glock 42 magazines in Krydex Gear poach
 krydex_spacer_1.stl      https://www.amazon.com/dp/B07L3DNPX3/
