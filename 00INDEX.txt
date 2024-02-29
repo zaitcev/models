@@ -20,6 +20,8 @@ cnea_03_ball.scad        Chimnea Cover, the top ball
 
 cube1.stl           The default cube from Blender
 
+file_holder.scad         A holder for a wide and flat file.
+
 forlife_cover_1.scad     A lid for ForLife Lucidity brew cup, replacement
 forlife_cover_1.stl
 forlife_cover_2.scad     A lid for ForLife Lucidity brew cup, with a handle
@@ -42,6 +44,8 @@ npt_0125_adapter.scad	 An adapter for 1 1/4 inch male NPT thread
 
 outlet_base.scad         A base for a wall outlet adapter tap for 6 outlets
 outlet_base.stl          https://www.amazon.com/dp/B073DM1XRL/
+
+panini_foot.scad         A foot for a panini press
 
 ph_holder_bmw_x3.scad    The 2019 BMW X3 phone holder
 ph_holder_bmw_x3.stl
