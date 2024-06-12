@@ -48,6 +48,9 @@ panini_foot.scad         A foot for a panini press
 ph_holder_bmw_x3.scad    The 2019 BMW X3 phone holder
 ph_holder_bmw_x3.stl
 
+rain_coll_main.scad      Rain collector device on top of a plastic barrel
+rain_coll_grate.scad
+
 shoe_horn_hanger.scad    A hanger hook for a shoe horn
 shoe_horn_hanger.stl
 
