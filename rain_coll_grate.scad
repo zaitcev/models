@@ -48,7 +48,7 @@ module ridge (r) {
 module grate () {
     // Main part is basically a flat coolander
     difference () {
-        cylinder(grate_th, r=46.0, $fn=36);
+        cylinder(grate_th, r=46.8, $fn=36);
         holes();
     }
     // Stiffening ridges

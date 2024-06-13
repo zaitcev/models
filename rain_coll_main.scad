@@ -11,7 +11,7 @@ base_th = 2.4;
 barrel_h = 30.0;
 step_h = base_th + 4.0;
 
-hole_d = 5.0;
+hole_d = 5.3;
 corner_r = 6.0;
 
 module mould () {
@@ -41,14 +41,15 @@ module main () {
         mould();
 
         // Corner holes
+        // The stupidly low $fn is there to deal with printer crashing.
         translate([base_pitch/2, base_pitch/2, -0.01])
-            cylinder(base_th + 0.02, r=hole_d/2, $fn=12);
+            cylinder(base_th + 0.02, r=hole_d/2, $fn=6);
         translate([(base_pitch/2)*-1, base_pitch/2, -0.01])
-            cylinder(base_th + 0.02, r=hole_d/2, $fn=12);
+            cylinder(base_th + 0.02, r=hole_d/2, $fn=6);
         translate([(base_pitch/2)*-1, (base_pitch/2)*-1, -0.01])
-            cylinder(base_th + 0.02, r=hole_d/2, $fn=12);
+            cylinder(base_th + 0.02, r=hole_d/2, $fn=6);
         translate([base_pitch/2, (base_pitch/2)*-1, -0.01])
-            cylinder(base_th + 0.02, r=hole_d/2, $fn=12);
+            cylinder(base_th + 0.02, r=hole_d/2, $fn=6);
 
          // Large center hole with a step
         translate([0, 0, step_h])
