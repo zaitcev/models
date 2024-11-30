@@ -24,6 +24,8 @@ cube1.stl           The default cube from Blender
 
 file_holder.scad         A holder for a wide and flat file.
 
+garden_gl_adapter.scad   Adapter for a garden solar globe light
+
 forlife_cover_1.scad     A lid for ForLife Lucidity brew cup, replacement
 forlife_cover_1.stl
 forlife_cover_2.scad     A lid for ForLife Lucidity brew cup, with a handle
