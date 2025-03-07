@@ -16,7 +16,7 @@ intersection () {
           translate([-10, 21, 4]) cylinder(66, 9, 9);
           translate([-19, 0, 4]) cube([38, 5, 66]);
         }
-        sphere(4);
+        sphere(4.4);
       }
 
       // inside shape
