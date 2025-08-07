@@ -21,25 +21,31 @@ module cap () {
     }
 }
 
-module stem () {
+module stem (height, girdth) {
+
+    main_r = girdth/2;
+
+    // The sphere (egg) and the cone intersect more or less smoothly.
+    bot_h = height * 0.375;
+    cone_z = height * 0.250;
 
     // The most of the height is a somewhat fat cone.
-    translate([0, 0, 20.0])
-        cylinder(50.0, 20.0, 17.0, $fn=48.0);
+    translate([0, 0, cone_z])
+        cylinder(height - bot_h, main_r, main_r*0.85, $fn=48.0);
 
     intersection () {
-        cylinder(30.01, r=22.0);
+        cylinder(bot_h + 0.01, r=22.0);
 
-        translate([0, 0, 20.0])
+        translate([0, 0, cone_z])
             scale([1.0, 1.0, 2.0])
-                sphere(r=20.0, $fn=48.0);
+                sphere(r=main_r, $fn=48.0);
     }
 }
 
 // This is the desired mushroom.
 module shroom () {
     translate([0, 0, -0.01])   // remove 0-thick plane at the bottom
-        stem();
+        stem(80.0, 40.0);
     translate([0, 0, 70.0])
         cap();
 }
