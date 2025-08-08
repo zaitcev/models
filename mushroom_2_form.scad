@@ -99,12 +99,20 @@ module form () {
 }
 
 module half () {
-    intersection () {
-        form();
 
-        // This slices exactly half, a 180 degree cut.
-        translate([0, (200.0/2)*-1, 0.01])
-            cube([200.0, 200.0, 200.0]);
+    rotate(65.0, [0,1,0]) {
+
+        intersection () {
+            form();
+
+            // // This is half.
+            // translate([0, (200.0/2)*-1, 0.01])
+            //    cube([200.0, 200.0, 200.0]);
+
+            // This is quarter.
+            rotate(-45.0, [0,0,1])
+                cube([200.0, 200.0, 200.0]);
+        }
     }
 }
 
