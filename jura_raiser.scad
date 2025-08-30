@@ -5,7 +5,7 @@
 
 riser_l = 21.0;    // X - inside size
 riser_w = 17.0;    // Y - inside size
-riser_h = 40.0;    // Z - very tall
+riser_h = 12.0;    // Z - very tall
 
 // We make the indent just deep enough that the machine rests on the feet,
 // not on the surrounding plastic. This isolates vibrations at least somewhat.
