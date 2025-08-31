@@ -21,6 +21,8 @@ cnea_01_segment.scad     Chimnea Cover, a segment of the main cone
 cnea_02_ring.scad        Chimnea Cover, the center ring
 cnea_03_ball.scad        Chimnea Cover, the top ball
 
+cont_flap_1.scad         Locking flap for a kitchen container
+
 crank_clip.scad          Crank Clip
 
 cube1.stl           The default cube from Blender
