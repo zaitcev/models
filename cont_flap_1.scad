@@ -39,9 +39,9 @@ module flap_body () {
                         cylinder(body_yw, r=upr_r, $fn=20);
             }
             // The axis
-            translate([upr_r, ((body_yw+2.0)/2)*-1, upr_axis_zh])
+            translate([upr_r, ((body_yw+4.0)/2)*-1, upr_axis_zh])
                 rotate(-90.0, [1,0,0])
-                    cylinder((body_yw+2.0), r=1.0, $fn=20);
+                    cylinder((body_yw+4.0), r=1.2, $fn=20);
        }
 
        translate([2.0, ((body_yw-2*stf_th)/2)*-1, 0])
@@ -60,7 +60,7 @@ module flap_pawl () {
     translate([0, (flap_yw/2)*-1, 0]) {
         hull () {
             translate([-2.1, 0, 0])
-               cube([2.1, flap_yw, 0.1]);
+               cube([2.3, flap_yw, 0.1]);
             translate([-2.1, 0, 5.2])
                cube([2.1, flap_yw, 0.1]);
             translate([-0.8, 0, 6.6])
@@ -70,9 +70,9 @@ module flap_pawl () {
 }
 
 module flap_pawls () {
-    translate([19.4, flap_yoff*-1, 0])
+    translate([19.2, flap_yoff*-1, 0])
         flap_pawl();
-    translate([19.4, flap_yoff, 0])
+    translate([19.2, flap_yoff, 0])
         flap_pawl();
 }
 
