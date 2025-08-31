@@ -76,9 +76,86 @@ module flap_pawls () {
         flap_pawl();
 }
 
+module dewarping () {
+    dew_off = 0.8;
+
+    // Negative
+    translate([23.0, -35.0, dew_off])
+        cylinder(body_base_th-dew_off+0.01, r=3.0);
+    translate([23.0, -28.0, dew_off])
+        cylinder(body_base_th-dew_off+0.01, r=3.0);
+    translate([23.0, -21.0, dew_off])
+        cylinder(body_base_th-dew_off+0.01, r=3.0);
+
+    translate([10.0, -28.0, dew_off]) {
+        hull () {
+            translate([-3.0, 7.0, dew_off])
+                cylinder(body_base_th-dew_off+0.01, r=3.0);
+            translate([-3.0, -7.0, dew_off])
+                cylinder(body_base_th-dew_off+0.01, r=3.0);
+            translate([ 3.0, -7.0, dew_off])
+                cylinder(body_base_th-dew_off+0.01, r=3.0);
+            translate([ 3.0, 7.0, dew_off])
+                cylinder(body_base_th-dew_off+0.01, r=3.0);
+        }
+    }
+
+    translate([15.0, -8.5, dew_off]) {
+        hull () {
+            translate([-8.0,  5.0, dew_off])
+                cylinder(body_base_th-dew_off+0.01, r=3.0);
+            translate([-8.0, -5.0, dew_off])
+                cylinder(body_base_th-dew_off+0.01, r=3.0);
+            translate([ 8.0, -5.0, dew_off])
+                cylinder(body_base_th-dew_off+0.01, r=3.0);
+            translate([ 8.0,  5.0, dew_off])
+                cylinder(body_base_th-dew_off+0.01, r=3.0);
+        }
+    }
+
+    // Positive
+    translate([23.0, 35.0, dew_off])
+        cylinder(body_base_th-dew_off+0.01, r=3.0);
+    translate([23.0, 28.0, dew_off])
+        cylinder(body_base_th-dew_off+0.01, r=3.0);
+    translate([23.0, 21.0, dew_off])
+        cylinder(body_base_th-dew_off+0.01, r=3.0);
+
+    translate([10.0, 28.0, dew_off]) {
+        hull () {
+            translate([-3.0, 7.0, dew_off])
+                cylinder(body_base_th-dew_off+0.01, r=3.0);
+            translate([-3.0, -7.0, dew_off])
+                cylinder(body_base_th-dew_off+0.01, r=3.0);
+            translate([ 3.0, -7.0, dew_off])
+                cylinder(body_base_th-dew_off+0.01, r=3.0);
+            translate([ 3.0, 7.0, dew_off])
+                cylinder(body_base_th-dew_off+0.01, r=3.0);
+        }
+    }
+
+    translate([15.0, 8.5, dew_off]) {
+        hull () {
+            translate([-8.0,  5.0, dew_off])
+                cylinder(body_base_th-dew_off+0.01, r=3.0);
+            translate([-8.0, -5.0, dew_off])
+                cylinder(body_base_th-dew_off+0.01, r=3.0);
+            translate([ 8.0, -5.0, dew_off])
+                cylinder(body_base_th-dew_off+0.01, r=3.0);
+            translate([ 8.0,  5.0, dew_off])
+                cylinder(body_base_th-dew_off+0.01, r=3.0);
+        }
+    }
+}
+
 module flap () {
-    flap_body();
-    flap_pawls();
+    difference () {
+        union () {
+            flap_body();
+            flap_pawls();
+        }
+        dewarping();
+    }
 }
 
 flap();
