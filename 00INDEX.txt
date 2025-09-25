@@ -57,6 +57,8 @@ outlet_base.stl          https://www.amazon.com/dp/B073DM1XRL/
 
 panini_foot.scad         A foot for a panini press
 
+pete_is_1.scad           Desktop sign "in/out"
+
 ph_holder_bmw_x3.scad    The 2019 BMW X3 phone holder
 ph_holder_bmw_x3.stl
 
