@@ -2,7 +2,9 @@
 // The "Pete is" sign
 //
 
-side_th = 3.0;
+// Make every effort to print this straight. Thick rafts, brims, everything.
+
+side_th = 2.2;
 side_w = 154;
 side_h = 40;
 
